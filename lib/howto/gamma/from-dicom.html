@@ -570,6 +570,21 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pydicom in /home/runner/work/pymedphys/pymedphys/.venv/lib/python3.8/site-packages (2.1.2)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pymedphys in /home/runner/work/pymedphys/pymedphys/.venv/lib/python3.8/site-packages (0.36.0.dev2)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: typing-extensions in /home/runner/work/pymedphys/pymedphys/.venv/lib/python3.8/site-packages (from pymedphys) (3.7.4.3)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Yellow">WARNING: You are using pip version 20.2.2; however, version 21.0.1 is available.</span>
+<span class=" -Color -Color-Yellow">You should consider upgrading via the &#39;/home/runner/work/pymedphys/pymedphys/.venv/bin/python -m pip install --upgrade pip&#39; command.</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="getting-the-demo-dicom-files">
 <h2>Getting the demo DICOM files<a class="headerlink" href="#getting-the-demo-dicom-files" title="Permalink to this headline">¶</a></h2>
@@ -581,11 +596,21 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/runner/.pymedphys/data/original_dose_beam_4.dcm&#39;)
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluation_filepath</span> <span class="o">=</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">data_path</span><span class="p">(</span><span class="s2">&quot;logfile_dose_beam_4.dcm&quot;</span><span class="p">)</span>
 <span class="n">evaluation_filepath</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/runner/.pymedphys/data/logfile_dose_beam_4.dcm&#39;)
 </pre></div>
 </div>
 </div>
@@ -616,10 +641,20 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(152,)
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">y_ref</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(158,)
 </pre></div>
 </div>
 </div>
@@ -630,10 +665,20 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(254,)
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">dose_reference</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(152, 158, 254)
 </pre></div>
 </div>
 </div>
@@ -661,6 +706,39 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calcing using local normalisation point for gamma
+Global normalisation set to 1.9462822416083623
+Global dose threshold set to [0.01946282] ([1]% of normalisation)
+Distance threshold set to [1]
+Lower dose cutoff set to 0.3892564483216725 (20% of normalisation)
+
+
+Current distance: 0.00 mm | Number of reference points remaining: 106910 | Points tested per reference point: 1 | RAM split count: 1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Current distance: 0.10 mm | Number of reference points remaining: 106910 | Points tested per reference point: 23 | RAM split count: 1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Current distance: 0.20 mm | Number of reference points remaining: 74257 | Points tested per reference point: 67 | RAM split count: 2
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Current distance: 0.30 mm | Number of reference points remaining: 16220 | Points tested per reference point: 135 | RAM split count: 1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Current distance: 0.40 mm | Number of reference points remaining: 2732 | Points tested per reference point: 227 | RAM split count: 1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Current distance: 0.50 mm | Number of reference points remaining: 760 | Points tested per reference point: 348 | RAM split count: 1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Current distance: 0.60 mm | Number of reference points remaining: 257 | Points tested per reference point: 485 | RAM split count: 1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Complete!
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -679,6 +757,12 @@
 <span class="c1"># plt.savefig(&#39;gamma_hist.png&#39;, dpi=300)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Local Gamma (0.5%/0.5mm) | Percent Pass: 100.00 %&#39;)
+</pre></div>
+</div>
+<img alt="../../../_images/from-dicom_15_1.png" src="../../../_images/from-dicom_15_1.png" />
 </div>
 </div>
 </div>
@@ -774,6 +858,36 @@
     
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/from-dicom_18_0.png" src="../../../_images/from-dicom_18_0.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="../../../_images/from-dicom_18_2.png" src="../../../_images/from-dicom_18_2.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="../../../_images/from-dicom_18_4.png" src="../../../_images/from-dicom_18_4.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="../../../_images/from-dicom_18_6.png" src="../../../_images/from-dicom_18_6.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="../../../_images/from-dicom_18_8.png" src="../../../_images/from-dicom_18_8.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="../../../_images/from-dicom_18_10.png" src="../../../_images/from-dicom_18_10.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="../../../_images/from-dicom_18_12.png" src="../../../_images/from-dicom_18_12.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
