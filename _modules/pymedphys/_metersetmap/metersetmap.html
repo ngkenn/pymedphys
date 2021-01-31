@@ -202,12 +202,17 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../lib/ref/dicom.html">
-     DICOM Module
+     DICOM
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../lib/ref/gamma.html">
-     Gamma Index
+     Gamma
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../lib/ref/mosaiq.html">
+     Mosaiq
     </a>
    </li>
    <li class="toctree-l2">
@@ -217,7 +222,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../lib/ref/electronfactors.html">
-     Electron Cutout Factors
+     Electron Insert Factors
     </a>
    </li>
    <li class="toctree-l2 collapsible-parent">
@@ -628,8 +633,8 @@
 <span class="sd">    &gt;&gt;&gt; import pymedphys</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; def metersetmap_from_mosaiq(msq_server_name, field_id):</span>
-<span class="sd">    ...     with pymedphys.mosaiq.connect(msq_server_name) as cursor:</span>
-<span class="sd">    ...         delivery = pymedphys.Delivery.from_mosaiq(cursor, field_id)</span>
+<span class="sd">    ...     with pymedphys.mosaiq.connect(msq_server_name) as connection:</span>
+<span class="sd">    ...         delivery = pymedphys.Delivery.from_mosaiq(connection, field_id)</span>
 <span class="sd">    ...</span>
 <span class="sd">    ...     grid = pymedphys.metersetmap.grid()</span>
 <span class="sd">    ...     metersetmap = delivery.metersetmap()</span>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Electron Insert Factors &#8212; PyMedPhys</title>
+    <title>Mosaiq &#8212; PyMedPhys</title>
     
   <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -56,12 +56,12 @@
         const thebe_selector_output = ".output,.cell_output"
     </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <link rel="canonical" href="https://docs.pymedphys.com/lib/ref/electronfactors.html" />
+    <link rel="canonical" href="https://docs.pymedphys.com/lib/ref/mosaiq.html" />
     <link rel="shortcut icon" href="../../_static/pymedphys.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Experimental Modules" href="experimental/index.html" />
-    <link rel="prev" title="MetersetMap" href="metersetmap.html" />
+    <link rel="next" title="MetersetMap" href="metersetmap.html" />
+    <link rel="prev" title="Gamma" href="gamma.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -78,10 +78,10 @@
 
 
 <!-- Opengraph tags -->
-<meta property="og:url" content="https://docs.pymedphys.com/lib/ref/electronfactors.html" />
+<meta property="og:url" content="https://docs.pymedphys.com/lib/ref/mosaiq.html" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Electron Insert Factors" />
-<meta property="og:description" content="Electron Insert Factors  Summary    A suite of functions that model electron insert/cutout factors by parameterising them as equivalent ellipses.  API    pymedp" />
+<meta property="og:title" content="Mosaiq" />
+<meta property="og:description" content="Mosaiq  Summary    Module to handle the connection to a Mosaiq SQL database and execute SQL queries.  API  Connect and Query the Mosaiq Database    pymedphys.mo" />
 
 <meta property="og:image" content="https://docs.pymedphys.com/_static/pymedphys.svg" />
 
@@ -212,8 +212,8 @@
      Gamma
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="mosaiq.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Mosaiq
     </a>
    </li>
@@ -222,8 +222,8 @@
      MetersetMap
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="electronfactors.html">
      Electron Insert Factors
     </a>
    </li>
@@ -440,7 +440,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/lib/ref/electronfactors.rst"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/lib/ref/mosaiq.rst"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
@@ -460,10 +460,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/pymedphys/pymedphys/issues/new?title=Issue%20on%20page%20%2Flib/ref/electronfactors.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/pymedphys/pymedphys/issues/new?title=Issue%20on%20page%20%2Flib/ref/mosaiq.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/pymedphys/pymedphys/edit/main/lib/pymedphys/docs/lib/ref/electronfactors.rst"><button
+        <a class="edit-button" href="https://github.com/pymedphys/pymedphys/edit/main/lib/pymedphys/docs/lib/ref/mosaiq.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -490,7 +490,7 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-pymedphys.electronfactors">
+  <a class="reference internal nav-link" href="#module-pymedphys.mosaiq">
    Summary
   </a>
  </li>
@@ -498,6 +498,13 @@
   <a class="reference internal nav-link" href="#api">
    API
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#connect-and-query-the-mosaiq-database">
+     Connect and Query the Mosaiq Database
+    </a>
+   </li>
+  </ul>
  </li>
 
                 <li class="toc-h2 nav-item toc-entry">
@@ -520,154 +527,159 @@
             
               <div>
                 
-  <div class="section" id="electron-insert-factors">
-<h1>Electron Insert Factors<a class="headerlink" href="#electron-insert-factors" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-pymedphys.electronfactors">
-<span id="summary"></span><h2>Summary<a class="headerlink" href="#module-pymedphys.electronfactors" title="Permalink to this headline">¶</a></h2>
-<p>A suite of functions that model electron insert/cutout factors by
-parameterising them as equivalent ellipses.</p>
+  <div class="section" id="mosaiq">
+<h1>Mosaiq<a class="headerlink" href="#mosaiq" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-pymedphys.mosaiq">
+<span id="summary"></span><h2>Summary<a class="headerlink" href="#module-pymedphys.mosaiq" title="Permalink to this headline">¶</a></h2>
+<p>Module to handle the connection to a Mosaiq SQL database and execute SQL queries.</p>
 </div>
 <div class="section" id="api">
 <h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="connect-and-query-the-mosaiq-database">
+<h3>Connect and Query the Mosaiq Database<a class="headerlink" href="#connect-and-query-the-mosaiq-database" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
-<dt id="pymedphys.electronfactors.parameterise_insert">
-<code class="sig-prename descclassname">pymedphys.electronfactors.</code><code class="sig-name descname">parameterise_insert</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">callback</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pymedphys/_electronfactors/core.html#parameterise_insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymedphys.electronfactors.parameterise_insert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the parameterisation of an insert given x and y coords.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pymedphys.electronfactors.spline_model">
-<code class="sig-prename descclassname">pymedphys.electronfactors.</code><code class="sig-name descname">spline_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_test</span></em>, <em class="sig-param"><span class="n">ratio_perim_area_test</span></em>, <em class="sig-param"><span class="n">width_data</span></em>, <em class="sig-param"><span class="n">ratio_perim_area_data</span></em>, <em class="sig-param"><span class="n">factor_data</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pymedphys/_electronfactors/core.html#spline_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymedphys.electronfactors.spline_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the result of the spline model.</p>
-<p>The bounding box is chosen so as to allow extrapolation. The spline orders
-are two in the width direction and one in the perimeter/area direction. For
-justification on using this method for modelling electron insert factors
-see the <em>Methods: Bivariate spline model</em> section within
-&lt;<a class="reference external" href="http://dx.doi.org/10.1016/j.ejmp.2015.11.002">http://dx.doi.org/10.1016/j.ejmp.2015.11.002</a>&gt;.</p>
+<dt id="pymedphys.mosaiq.connect">
+<code class="sig-prename descclassname">pymedphys.mosaiq.</code><code class="sig-name descname">connect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hostname</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">port</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1433</span></em>, <em class="sig-param"><span class="n">database</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'MOSAIQ'</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">password</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; pymedphys._mosaiq.connect.Connection<a class="reference internal" href="../../_modules/pymedphys/_mosaiq/api.html#connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymedphys.mosaiq.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to a Mosaiq SQL server.</p>
+<p>The first time running this function on a system will result in a
+prompt to login to the Mosaiq SQL server. The provided credentials
+will be stored within the operating system’s password storage
+facilities. Subsequent calls to this function will pull from that
+password storage in order to connect.</p>
+<p>Can optionally be called as a context manager. This will have the
+extra benefit of closing the database cursor once leaving the
+context manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>width_test</strong> (<em>np.ndarray</em>) – The width point(s) which are to have the electron insert factor
-interpolated.</p></li>
-<li><p><strong>ratio_perim_area_test</strong> (<em>np.ndarray</em>) – The perimeter/area which are to have the electron insert factor
-interpolated.</p></li>
-<li><p><strong>width_data</strong> (<em>np.ndarray</em>) – The width data points for the relevant applicator, energy and ssd.</p></li>
-<li><p><strong>ratio_perim_area_data</strong> (<em>np.ndarray</em>) – The perimeter/area data points for the relevant applicator, energy and
-ssd.</p></li>
-<li><p><strong>factor_data</strong> (<em>np.ndarray</em>) – The insert factor data points for the relevant applicator, energy and
-ssd.</p></li>
+<li><p><strong>hostname</strong> (<em>str</em>) – The IP address or hostname of the SQL server.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – The port at which the SQL server is hosted, by default <code class="docutils literal notranslate"><span class="pre">1433</span></code></p></li>
+<li><p><strong>database</strong> (<em>str</em><em>, </em><em>optional</em>) – The MSSQL database name, by default <code class="docutils literal notranslate"><span class="pre">&quot;MOSAIQ&quot;</span></code></p></li>
+<li><p><strong>alias</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A human readable representation of the server, this is the name
+of the server presented to the user should there not be
+credentials already on the machine, by default <code class="docutils literal notranslate"><span class="pre">&quot;hostname:port/database&quot;</span></code></p></li>
+<li><p><strong>username</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Provide a username to login to the database with, by default the
+username is either pulled from the system’s credential storage,
+or an interactive prompt is used.</p></li>
+<li><p><strong>password</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Provide a password to login to the database with, by default the
+password is either pulled from the system’s credential storage,
+or an interactive prompt is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>result</strong> – The interpolated electron insert factors for width_test and
-ratio_perim_area_test.</p>
+<dd class="field-even"><p><p><strong>connection</strong> – A database connection. This connection can be passed to
+<a class="reference internal" href="#pymedphys.mosaiq.execute" title="pymedphys.mosaiq.execute"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymedphys.mosaiq.execute()</span></code></a> to be able to run queries.</p>
+<p>The method <code class="docutils literal notranslate"><span class="pre">close()</span></code> can be called on this object to close the
+database connection.</p>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
+<dd class="field-odd"><p>pymedphys.mosaiq.Connection</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>See <a class="reference internal" href="#pymedphys.mosaiq.execute" title="pymedphys.mosaiq.execute"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymedphys.mosaiq.execute()</span></code></a> for examples of usage.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pymedphys.electronfactors.calculate_deformability">
-<code class="sig-prename descclassname">pymedphys.electronfactors.</code><code class="sig-name descname">calculate_deformability</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x_test</span></em>, <em class="sig-param"><span class="n">y_test</span></em>, <em class="sig-param"><span class="n">x_data</span></em>, <em class="sig-param"><span class="n">y_data</span></em>, <em class="sig-param"><span class="n">z_data</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pymedphys/_electronfactors/core.html#calculate_deformability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymedphys.electronfactors.calculate_deformability" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the result of the deformability test.</p>
-<p>This function takes an array of test points and loops over
-<code class="docutils literal notranslate"><span class="pre">_single_calculate_deformability</span></code>.</p>
-<p>The deformability test applies a shift to the spline to determine whether
-or not sufficient information for modelling is available. For further
-details on the deformability test see the <em>Methods: Defining valid
-prediction regions of the spline</em> section within
-&lt;<a class="reference external" href="http://dx.doi.org/10.1016/j.ejmp.2015.11.002">http://dx.doi.org/10.1016/j.ejmp.2015.11.002</a>&gt;.</p>
+<dt id="pymedphys.mosaiq.execute">
+<code class="sig-prename descclassname">pymedphys.mosaiq.</code><code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connection</span><span class="p">:</span> <span class="n">pymedphys._mosaiq.connect.Connection</span></em>, <em class="sig-param"><span class="n">query</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">parameters</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span>str<span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../../_modules/pymedphys/_mosaiq/api.html#execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymedphys.mosaiq.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute SQL queries on a Mosaiq database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x_test</strong> (<em>np.ndarray</em>) – The x coordinate of the point(s) to test</p></li>
-<li><p><strong>y_test</strong> (<em>np.ndarray</em>) – The y coordinate of the point(s) to test</p></li>
-<li><p><strong>x_data</strong> (<em>np.ndarray</em>) – The x coordinate of the model data to test</p></li>
-<li><p><strong>y_data</strong> (<em>np.ndarray</em>) – The y coordinate of the model data to test</p></li>
-<li><p><strong>z_data</strong> (<em>np.ndarray</em>) – The z coordinate of the model data to test</p></li>
+<li><p><strong>connection</strong> (<em>pymedphys.mosaiq.Connection</em>) – A database connection. This can be retrieved by calling
+<code class="docutils literal notranslate"><span class="pre">pymedphys.mosaiq.connect</span></code></p></li>
+<li><p><strong>query</strong> (<em>str</em>) – The SQL query to execute. Do not parse Python variables directly
+into this string. Instead create this string as if you
+are going to call <code class="docutils literal notranslate"><span class="pre">format</span></code> on it
+(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str.format">https://docs.python.org/3/library/stdtypes.html#str.format</a>)
+and then utilise the parameters optional argument to this
+function. That way, the underlying library <code class="docutils literal notranslate"><span class="pre">pymssql</span></code> will
+sanitise the parameters to protect against malicious inputs.</p></li>
+<li><p><strong>parameters</strong> (<em>Dict</em><em>, </em><em>optional</em>) – Parameters to be included within the query. These are sanitised
+by the underlying <code class="docutils literal notranslate"><span class="pre">pymssql</span></code> library before being included
+within the query string, by default None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>deformability</strong> – The resulting deformability between 0 and 1
-representing the ratio of deviation the spline model underwent at
-the point in question by introducing an outlier at the point in
-question.</p>
+<dd class="field-even"><p><strong>results</strong> – The results from the database query organised so that each row
+is an item within the returned list.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
+<dd class="field-odd"><p>List[Tuple[str, ..]]</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Directly calling the connection object and listing all patients that
+have the last name of <code class="docutils literal notranslate"><span class="pre">&quot;PHANTOM&quot;</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pymedphys.mosaiq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">mosaiq</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;msqsql&#39;</span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pymedphys</span><span class="o">.</span><span class="n">mosaiq</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">connection</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="sd">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="sd">    SELECT</span>
+<span class="gp">... </span><span class="sd">        Ident.IDA,</span>
+<span class="gp">... </span><span class="sd">        Patient.Last_Name,</span>
+<span class="gp">... </span><span class="sd">        Patient.First_Name</span>
+<span class="gp">... </span><span class="sd">    FROM Ident, Patient</span>
+<span class="gp">... </span><span class="sd">    WHERE</span>
+<span class="gp">... </span><span class="sd">        Patient.Pat_ID1 = Ident.Pat_ID1 AND</span>
+<span class="gp">... </span><span class="sd">        Patient.Last_Name = %(last_name)s</span>
+<span class="gp">... </span><span class="sd">    &#39;&#39;&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s2">&quot;last_name&quot;</span><span class="p">:</span> <span class="s2">&quot;PHANTOM&quot;</span><span class="p">},</span>
+<span class="gp">... </span><span class="p">)</span>  
+<span class="go">[(&#39;654324&#39;, &#39;PHANTOM&#39;, &#39;CATPHAN&#39;),</span>
+<span class="go"> (&#39;944444&#39;, &#39;PHANTOM&#39;, &#39;DELTA4&#39;),</span>
+<span class="go"> (&#39;654321&#39;, &#39;PHANTOM&#39;, &#39;PELVIS&#39;),</span>
+<span class="go"> (&#39;012534&#39;, &#39;PHANTOM&#39;, &#39;QUASAR4D&#39;),</span>
+<span class="go"> (&#39;987654&#39;, &#39;PHANTOM&#39;, &#39;RESPIRATORY&#39;),</span>
+<span class="go"> (&#39;654325&#39;, &#39;PHANTOM&#39;, &#39;RW3&#39;)]</span>
+</pre></div>
+</div>
+<p>Connecting via a context manager and using pandas to present the
+results as a table.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pymedphys.mosaiq</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">mosaiq</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;msqsql&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>  
+<span class="gp">... </span>    <span class="n">results</span> <span class="o">=</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">mosaiq</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">connection</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="sd">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="sd">        SELECT</span>
+<span class="gp">... </span><span class="sd">            Ident.IDA,</span>
+<span class="gp">... </span><span class="sd">            Chklist.Due_DtTm</span>
+<span class="gp">... </span><span class="sd">        FROM Chklist, Staff, Ident</span>
+<span class="gp">... </span><span class="sd">        WHERE</span>
+<span class="gp">... </span><span class="sd">            Chklist.Pat_ID1 = Ident.Pat_ID1 AND</span>
+<span class="gp">... </span><span class="sd">            Staff.Staff_ID = Chklist.Rsp_Staff_ID AND</span>
+<span class="gp">... </span><span class="sd">            Staff.Last_Name = %(qcl_location)s AND</span>
+<span class="gp">... </span><span class="sd">            Chklist.Complete = 0</span>
+<span class="gp">... </span><span class="sd">        &#39;&#39;&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="s2">&quot;qcl_location&quot;</span><span class="p">:</span> <span class="s2">&quot;Physics_Check&quot;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>  
+<span class="gp">... </span>    <span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="s2">&quot;patient_id&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;due&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">  patient_id                 due</span>
+<span class="go">0     000000 2021-02-01 23:59:59</span>
+<span class="go">1     000001 2021-02-01 23:59:59</span>
+<span class="go">2     000002 2021-02-01 23:59:59</span>
+<span class="go">3     000003 2021-03-08 23:59:59</span>
+</pre></div>
+</div>
 </dd></dl>
 
-<dl class="py function">
-<dt id="pymedphys.electronfactors.spline_model_with_deformability">
-<code class="sig-prename descclassname">pymedphys.electronfactors.</code><code class="sig-name descname">spline_model_with_deformability</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_test</span></em>, <em class="sig-param"><span class="n">ratio_perim_area_test</span></em>, <em class="sig-param"><span class="n">width_data</span></em>, <em class="sig-param"><span class="n">ratio_perim_area_data</span></em>, <em class="sig-param"><span class="n">factor_data</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pymedphys/_electronfactors/core.html#spline_model_with_deformability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymedphys.electronfactors.spline_model_with_deformability" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the spline model for points with sufficient deformability.</p>
-<p>Calls both <code class="docutils literal notranslate"><span class="pre">spline_model</span></code> and <code class="docutils literal notranslate"><span class="pre">calculate_deformability</span></code> and then adjusts
-the result so that points with  deformability greater than 0.5 return
-<code class="docutils literal notranslate"><span class="pre">np.nan</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>width_test</strong> (<em>np.ndarray</em>) – The width point(s) which are to have the
-electron insert factor interpolated.</p></li>
-<li><p><strong>ratio_perim_area_test</strong> (<em>np.ndarray</em>) – The perimeter/area which are to
-have the electron insert factor interpolated.</p></li>
-<li><p><strong>width_data</strong> (<em>np.ndarray</em>) – The width data points for the relevant
-applicator, energy and ssd.</p></li>
-<li><p><strong>ratio_perim_area_data</strong> (<em>np.ndarray</em>) – The perimeter/area data points for
-the relevant applicator, energy and ssd.</p></li>
-<li><p><strong>factor_data</strong> (<em>np.ndarray</em>) – The insert factor data points for the
-relevant applicator, energy and ssd.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>model_factor</strong> – The interpolated electron insert factors for width_test
-and ratio_perim_area_test with points outside the valid prediction
-region set to <code class="docutils literal notranslate"><span class="pre">np.nan</span></code>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pymedphys.electronfactors.calculate_percent_prediction_differences">
-<code class="sig-prename descclassname">pymedphys.electronfactors.</code><code class="sig-name descname">calculate_percent_prediction_differences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width_data</span></em>, <em class="sig-param"><span class="n">ratio_perim_area_data</span></em>, <em class="sig-param"><span class="n">factor_data</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pymedphys/_electronfactors/core.html#calculate_percent_prediction_differences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymedphys.electronfactors.calculate_percent_prediction_differences" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the percent prediction differences.</p>
-<p>Calculates the model factor for each data point with that point removed
-from the data set. Used to determine an estimated uncertainty for
-prediction.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>width_data</strong> (<em>np.ndarray</em>) – The width data points for a specific
-applicator, energy and ssd.</p></li>
-<li><p><strong>ratio_perim_area_data</strong> (<em>np.ndarray</em>) – The perimeter/area data points for
-a specific applicator, energy and ssd.</p></li>
-<li><p><strong>factor_data</strong> (<em>np.ndarray</em>) – The insert factor data points for a specific
-applicator, energy and ssd.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>percent_prediction_differences</strong> – The predicted electron insert factors for each data point
-with that given data point removed.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pymedphys.electronfactors.visual_alignment_of_equivalent_ellipse">
-<code class="sig-prename descclassname">pymedphys.electronfactors.</code><code class="sig-name descname">visual_alignment_of_equivalent_ellipse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">width</span></em>, <em class="sig-param"><span class="n">length</span></em>, <em class="sig-param"><span class="n">callback</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pymedphys/_electronfactors/core.html#visual_alignment_of_equivalent_ellipse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymedphys.electronfactors.visual_alignment_of_equivalent_ellipse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Visually align the equivalent ellipse to the insert.</p>
-</dd></dl>
-
+</div>
 </div>
 </div>
 
@@ -705,7 +717,7 @@ with that given data point removed.</p>
             <script type="text/javascript">
                 DiscourseEmbed = {
                     discourseUrl: 'https://pymedphys.discourse.group/',
-                    discourseEmbedUrl: 'https://docs.pymedphys.com/lib/ref/electronfactors'
+                    discourseEmbedUrl: 'https://docs.pymedphys.com/lib/ref/mosaiq'
                 };
 
                 (function () {
@@ -717,8 +729,8 @@ with that given data point removed.</p>
             
             <div class='prev-next-bottom'>
                 
-    <a class='left-prev' id="prev-link" href="metersetmap.html" title="previous page">MetersetMap</a>
-    <a class='right-next' id="next-link" href="experimental/index.html" title="next page">Experimental Modules</a>
+    <a class='left-prev' id="prev-link" href="gamma.html" title="previous page">Gamma</a>
+    <a class='right-next' id="next-link" href="metersetmap.html" title="next page">MetersetMap</a>
 
             </div>
             

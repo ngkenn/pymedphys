@@ -60,8 +60,8 @@
     <link rel="shortcut icon" href="../../_static/pymedphys.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Electron Cutout Factors" href="electronfactors.html" />
-    <link rel="prev" title="Gamma Index" href="gamma.html" />
+    <link rel="next" title="Electron Insert Factors" href="electronfactors.html" />
+    <link rel="prev" title="Mosaiq" href="mosaiq.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -204,12 +204,17 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="dicom.html">
-     DICOM Module
+     DICOM
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="gamma.html">
-     Gamma Index
+     Gamma
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="mosaiq.html">
+     Mosaiq
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -219,7 +224,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="electronfactors.html">
-     Electron Cutout Factors
+     Electron Insert Factors
     </a>
    </li>
    <li class="toctree-l2 collapsible-parent">
@@ -668,8 +673,8 @@ used per pixel for each control point. Defaults to 10.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pymedphys</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">metersetmap_from_mosaiq</span><span class="p">(</span><span class="n">msq_server_name</span><span class="p">,</span> <span class="n">field_id</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">with</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">mosaiq</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">msq_server_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">cursor</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="n">delivery</span> <span class="o">=</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">Delivery</span><span class="o">.</span><span class="n">from_mosaiq</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="n">field_id</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">with</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">mosaiq</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">msq_server_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">delivery</span> <span class="o">=</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">Delivery</span><span class="o">.</span><span class="n">from_mosaiq</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">field_id</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="n">grid</span> <span class="o">=</span> <span class="n">pymedphys</span><span class="o">.</span><span class="n">metersetmap</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">metersetmap</span> <span class="o">=</span> <span class="n">delivery</span><span class="o">.</span><span class="n">metersetmap</span><span class="p">()</span>
@@ -758,8 +763,8 @@ used per pixel for each control point. Defaults to 10.</p></li>
             
             <div class='prev-next-bottom'>
                 
-    <a class='left-prev' id="prev-link" href="gamma.html" title="previous page">Gamma Index</a>
-    <a class='right-next' id="next-link" href="electronfactors.html" title="next page">Electron Cutout Factors</a>
+    <a class='left-prev' id="prev-link" href="mosaiq.html" title="previous page">Mosaiq</a>
+    <a class='right-next' id="next-link" href="electronfactors.html" title="next page">Electron Insert Factors</a>
 
             </div>
             
