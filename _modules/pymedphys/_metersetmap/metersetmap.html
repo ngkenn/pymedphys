@@ -763,6 +763,8 @@
 <span class="sd">           [0.14, 0.86, 1.  , 1.  , 1.  , 0.86, 0.14],</span>
 <span class="sd">           [0.03, 0.17, 0.2 , 0.2 , 0.2 , 0.17, 0.03]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mlc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mlc</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">jaw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jaw</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">leaf_pair_widths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">leaf_pair_widths</span><span class="p">)</span>
     <span class="n">leaf_division</span> <span class="o">=</span> <span class="n">leaf_pair_widths</span> <span class="o">/</span> <span class="n">grid_resolution</span>
@@ -1083,6 +1085,9 @@
 
 
 <span class="k">def</span> <span class="nf">_determine_calc_grid_and_adjustments</span><span class="p">(</span><span class="n">mlc</span><span class="p">,</span> <span class="n">jaw</span><span class="p">,</span> <span class="n">leaf_pair_widths</span><span class="p">,</span> <span class="n">grid_resolution</span><span class="p">):</span>
+    <span class="n">mlc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mlc</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">jaw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jaw</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
     <span class="n">min_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="o">-</span><span class="n">jaw</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
     <span class="n">max_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">jaw</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
 
