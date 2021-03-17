@@ -586,6 +586,23 @@
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#send">
+     send
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#Positional Arguments_repeat7">
+       Positional Arguments
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#Named Arguments_repeat4">
+       Named Arguments
+      </a>
+     </li>
+    </ul>
+   </li>
   </ul>
  </li>
 
@@ -614,7 +631,7 @@
 <span id="dicom-files"></span><h1>DICOM Files<a class="headerlink" href="#module-pymedphys.cli.dicom" title="Permalink to this headline">¶</a></h1>
 <p>Provides a various set of tools for DICOM header manipulation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">pymedphys</span> <span class="n">dicom</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
-                       <span class="p">{</span><span class="n">anonymise</span><span class="p">,</span><span class="n">merge</span><span class="o">-</span><span class="n">contours</span><span class="p">,</span><span class="n">adjust</span><span class="o">-</span><span class="n">machine</span><span class="o">-</span><span class="n">name</span><span class="p">,</span><span class="n">adjust</span><span class="o">-</span><span class="n">RED</span><span class="p">,</span><span class="n">adjust</span><span class="o">-</span><span class="n">RED</span><span class="o">-</span><span class="n">by</span><span class="o">-</span><span class="n">structure</span><span class="o">-</span><span class="n">name</span><span class="p">,</span><span class="n">listen</span><span class="p">}</span>
+                       <span class="p">{</span><span class="n">anonymise</span><span class="p">,</span><span class="n">merge</span><span class="o">-</span><span class="n">contours</span><span class="p">,</span><span class="n">adjust</span><span class="o">-</span><span class="n">machine</span><span class="o">-</span><span class="n">name</span><span class="p">,</span><span class="n">adjust</span><span class="o">-</span><span class="n">RED</span><span class="p">,</span><span class="n">adjust</span><span class="o">-</span><span class="n">RED</span><span class="o">-</span><span class="n">by</span><span class="o">-</span><span class="n">structure</span><span class="o">-</span><span class="n">name</span><span class="p">,</span><span class="n">listen</span><span class="p">,</span><span class="n">send</span><span class="p">}</span>
                        <span class="o">...</span>
 </pre></div>
 </div>
@@ -622,7 +639,7 @@
 <h2>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>dicom</kbd></dt>
-<dd><p>Possible choices: anonymise, merge-contours, adjust-machine-name, adjust-RED, adjust-RED-by-structure-name, listen</p>
+<dd><p>Possible choices: anonymise, merge-contours, adjust-machine-name, adjust-RED, adjust-RED-by-structure-name, listen, send</p>
 </dd>
 </dl>
 </div>
@@ -799,6 +816,36 @@
 </dd>
 <dt><kbd>-a, --aetitle</kbd></dt>
 <dd><p>The AE Title of this listen service</p>
+<p>Default: “PYMEDPHYS”</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="send">
+<h3>send<a class="headerlink" href="#send" title="Permalink to this headline">¶</a></h3>
+<p>Send DICOM objects to a DICOM endpoint</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pymedphys</span> <span class="n">dicom</span> <span class="n">send</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">AETITLE</span><span class="p">]</span> <span class="n">host</span> <span class="n">port</span> <span class="p">[</span><span class="n">dcmfiles</span> <span class="p">[</span><span class="n">dcmfiles</span> <span class="o">...</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat7">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat7" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>host</kbd></dt>
+<dd><p>The host name/IP of the DICOM listener</p>
+</dd>
+<dt><kbd>port</kbd></dt>
+<dd><p>The port of the DICOM listener</p>
+</dd>
+<dt><kbd>dcmfiles</kbd></dt>
+<dd><p>Path to DICOM objects to send</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat4">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat4" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>-a, --aetitle</kbd></dt>
+<dd><p>The Called AE Title</p>
 <p>Default: “PYMEDPHYS”</p>
 </dd>
 </dl>
