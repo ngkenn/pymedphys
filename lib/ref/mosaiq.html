@@ -542,9 +542,8 @@ prompt to login to the Mosaiq SQL server. The provided credentials
 will be stored within the operating system’s password storage
 facilities. Subsequent calls to this function will pull from that
 password storage in order to connect.</p>
-<p>Can optionally be called as a context manager. This will have the
-extra benefit of closing the database cursor once leaving the
-context manager.</p>
+<p>Can optionally be called as a context manager. This will close the
+database connection once leaving the context manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
