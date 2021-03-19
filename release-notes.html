@@ -1587,8 +1587,8 @@ re-exposed in its new form once complete.</p></li>
 <li><p>There have been a range of changes to the previously undocumented Mosaiq
 database connection and execution API.</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">pymedphys.mosaiq.connect</span></code> now returns a <code class="docutils literal notranslate"><span class="pre">connection</span></code> object instead of a
-<code class="docutils literal notranslate"><span class="pre">cursor</span></code> object. This was so as to align with PEP0249. See <a class="reference external" href="https://github.com/pymedphys/pymedphys/pull/1352">https://github.com/pymedphys/pymedphys/pull/1352</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pymedphys.mosaiq.connect</span></code> now returns a <code class="docutils literal notranslate"><span class="pre">Connection</span></code> object instead of a
+<code class="docutils literal notranslate"><span class="pre">Cursor</span></code> object. This was so as to align with PEP0249. See <a class="reference external" href="https://github.com/pymedphys/pymedphys/pull/1352">https://github.com/pymedphys/pymedphys/pull/1352</a>.</p></li>
 <li><p>All instances where previously the argument name within a function or
 method was <code class="docutils literal notranslate"><span class="pre">cursor</span></code> have been changed to <code class="docutils literal notranslate"><span class="pre">connection</span></code>.</p></li>
 <li><p>Previously a server and port could be provided to <code class="docutils literal notranslate"><span class="pre">pymedphys.mosaiq.connect</span></code>
@@ -1598,17 +1598,17 @@ separately. There are also three extra arguments, <code class="docutils literal 
 <code class="docutils literal notranslate"><span class="pre">password</span></code>. See either the docs <a class="reference external" href="https://docs.pymedphys.com/lib/ref/mosaiq.html">https://docs.pymedphys.com/lib/ref/mosaiq.html</a>
 or the docstring for more details <a class="reference external" href="https://github.com/pymedphys/pymedphys/blob/a124bc56fb576456cc6eec44a711ebd478a995f3/lib/pymedphys/_mosaiq/api.py#L33-L79">https://github.com/pymedphys/pymedphys/blob/a124bc56fb576456cc6eec44a711ebd478a995f3/lib/pymedphys/_mosaiq/api.py#L33-L79</a>.</p></li>
 <li><p>Removed <code class="docutils literal notranslate"><span class="pre">pymedphys.mosaiq.qcls</span></code>.</p></li>
-<li><p><strong>[Contributor facing only]</strong> replaced <code class="docutils literal notranslate"><span class="pre">pymedphys</span> <span class="pre">dev</span> <span class="pre">tests</span> <span class="pre">--pylint</span></code> with
-<code class="docutils literal notranslate"><span class="pre">pymedphys</span> <span class="pre">dev</span> <span class="pre">lint</span></code>.</p></li>
 </ul>
 </li>
+<li><p><strong>[Contributor facing only]</strong> replaced <code class="docutils literal notranslate"><span class="pre">pymedphys</span> <span class="pre">dev</span> <span class="pre">tests</span> <span class="pre">--pylint</span></code> with
+<code class="docutils literal notranslate"><span class="pre">pymedphys</span> <span class="pre">dev</span> <span class="pre">lint</span></code>.</p></li>
 </ul>
 </div>
 <div class="section" id="new-features-and-enhancements">
 <h3>New features and enhancements<a class="headerlink" href="#new-features-and-enhancements" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Added CLI argument for setting the hostname on the DICOM listen server. For
-example <code class="docutils literal notranslate"><span class="pre">pymedphys</span> <span class="pre">dicom</span> <span class="pre">listen</span> <span class="pre">7779</span> <span class="pre">--host</span> <span class="pre">127.0.0.1</span> </code>.</p></li>
+example <code class="docutils literal notranslate"><span class="pre">pymedphys</span> <span class="pre">dicom</span> <span class="pre">listen</span> <span class="pre">7779</span> <span class="pre">--host</span> <span class="pre">127.0.0.1</span></code>.</p></li>
 <li><p>Added DICOM send functionality to DICOM connect module and made it available on the CLI. For example <code class="docutils literal notranslate"><span class="pre">pymedphys</span> <span class="pre">dicom</span> <span class="pre">send</span> <span class="pre">127.0.0.1</span> <span class="pre">7779</span> <span class="pre">path\to\dicom\*.dcm</span></code></p></li>
 <li><p>A range of application changes and improvements. The PyMedPhys app can be
 accessed by running <code class="docutils literal notranslate"><span class="pre">pymedphys</span> <span class="pre">gui</span></code>.</p></li>
