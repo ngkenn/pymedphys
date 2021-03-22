@@ -489,7 +489,7 @@
 <span class="kn">from</span> <span class="nn">pymedphys._imports</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
 <span class="kn">from</span> <span class="nn">pymedphys._imports</span> <span class="kn">import</span> <span class="n">plt</span><span class="p">,</span> <span class="n">pydicom</span><span class="p">,</span> <span class="n">scipy</span>
 
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">IMAGE_ORIENTATION_MAP</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">orientation</span>
 <span class="kn">from</span> <span class="nn">.coords</span> <span class="kn">import</span> <span class="n">coords_in_datasets_are_equal</span><span class="p">,</span> <span class="n">xyz_axes_from_dataset</span>
 <span class="kn">from</span> <span class="nn">.header</span> <span class="kn">import</span> <span class="n">patient_ids_in_datasets_are_equal</span>
 <span class="kn">from</span> <span class="nn">.rtplan</span> <span class="kn">import</span> <span class="n">get_surface_entry_point_with_fallback</span><span class="p">,</span> <span class="n">require_gantries_be_zero</span>
@@ -573,7 +573,7 @@
 <span class="sd">        The RT DICOM plan used to extract surface parameters and verify gantry</span>
 <span class="sd">        angle 0 beams are used.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">require_patient_orientation</span><span class="p">(</span><span class="n">dose_dataset</span><span class="p">,</span> <span class="s2">&quot;HFS&quot;</span><span class="p">)</span>
+    <span class="n">orientation</span><span class="o">.</span><span class="n">require_dicom_patient_position</span><span class="p">(</span><span class="n">dose_dataset</span><span class="p">,</span> <span class="s2">&quot;HFS&quot;</span><span class="p">)</span>
     <span class="n">require_gantries_be_zero</span><span class="p">(</span><span class="n">plan_dataset</span><span class="p">)</span>
     <span class="n">depths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">depths</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -627,7 +627,7 @@
 <span class="sd">        parameters and verify gantry angle 0 beams are used.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">require_patient_orientation</span><span class="p">(</span><span class="n">dose_dataset</span><span class="p">,</span> <span class="s2">&quot;HFS&quot;</span><span class="p">)</span>
+    <span class="n">orientation</span><span class="o">.</span><span class="n">require_dicom_patient_position</span><span class="p">(</span><span class="n">dose_dataset</span><span class="p">,</span> <span class="s2">&quot;HFS&quot;</span><span class="p">)</span>
     <span class="n">require_gantries_be_zero</span><span class="p">(</span><span class="n">plan_dataset</span><span class="p">)</span>
     <span class="n">displacements</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">displacements</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -776,16 +776,6 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;DVH&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Dose (Gy)&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Relative Volume (%)&quot;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">require_patient_orientation</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">patient_orientation</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span>
-        <span class="n">ds</span><span class="o">.</span><span class="n">ImageOrientationPatient</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">IMAGE_ORIENTATION_MAP</span><span class="p">[</span><span class="n">patient_orientation</span><span class="p">])</span>
-    <span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;The supplied dataset has a patient &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;orientation other than </span><span class="si">{</span><span class="n">patient_orientation</span><span class="si">}</span><span class="s2">.&quot;</span>
-        <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">sum_doses_in_datasets</span><span class="p">(</span>
