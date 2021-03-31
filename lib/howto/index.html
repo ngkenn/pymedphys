@@ -193,10 +193,24 @@
      Adding a Linac
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="samba-ssh-tunnelling.html">
-     SAMBA SSH Tunnelling
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="tunnels/index.html">
+     Tunnels
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="tunnels/samba.html">
+       SAMBA SSH Tunnelling
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="tunnels/rsync.html">
+       Backups using rsync
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -450,9 +464,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/lib/howto/index.rst"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/lib/howto/index.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -473,7 +487,7 @@
             href="https://github.com/pymedphys/pymedphys/issues/new?title=Issue%20on%20page%20%2Flib/howto/index.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/pymedphys/pymedphys/edit/main/lib/pymedphys/docs/lib/howto/index.rst"><button
+        <a class="edit-button" href="https://github.com/pymedphys/pymedphys/edit/main/lib/pymedphys/docs/lib/howto/index.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -525,15 +539,10 @@
 <li class="toctree-l2"><a class="reference internal" href="add-a-linac.html#updating-the-config-toml-file">Updating the <code class="docutils literal notranslate"><span class="pre">config.toml</span></code> file</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="samba-ssh-tunnelling.html">SAMBA SSH Tunnelling</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="samba-ssh-tunnelling.html#background">Background</a></li>
-<li class="toctree-l2"><a class="reference internal" href="samba-ssh-tunnelling.html#pre-requisites">Pre-requisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="samba-ssh-tunnelling.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="samba-ssh-tunnelling.html#setting-the-ip-addresses">Setting the IP addresses</a></li>
-<li class="toctree-l2"><a class="reference internal" href="samba-ssh-tunnelling.html#add-ssh-server-to-hosts-file">Add SSH server to hosts file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="samba-ssh-tunnelling.html#initial-set-up-of-the-ssh-connection">Initial set up of the SSH connection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="samba-ssh-tunnelling.html#setting-up-the-ssh-port-forward-service-to-run-on-boot">Setting up the SSH port forward service to run on boot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="samba-ssh-tunnelling.html#viewing-the-logs">Viewing the logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tunnels/index.html">Tunnels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tunnels/index.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunnels/index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunnels/index.html#index">Index</a></li>
 </ul>
 </li>
 </ul>

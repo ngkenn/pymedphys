@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pseudonymisation Tool &#8212; PyMedPhys</title>
+    <title>Backups using rsync &#8212; PyMedPhys</title>
     
   <link rel="stylesheet" href="../../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -56,12 +56,12 @@
         const thebe_selector_output = ".output,.cell_output"
     </script>
     <script async="async" src="../../../_static/sphinx-thebe.js"></script>
-    <link rel="canonical" href="https://docs.pymedphys.com/lib/ref/experimental/pseudonymisation.html" />
+    <link rel="canonical" href="https://docs.pymedphys.com/lib/howto/tunnels/rsync.html" />
     <link rel="shortcut icon" href="../../../_static/pymedphys.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Background" href="../../background/index.html" />
-    <link rel="prev" title="Pinnacle Export Tool" href="pinnacle.html" />
+    <link rel="next" title="Reference" href="../../ref/index.html" />
+    <link rel="prev" title="SAMBA SSH Tunnelling" href="samba.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -78,10 +78,10 @@
 
 
 <!-- Opengraph tags -->
-<meta property="og:url" content="https://docs.pymedphys.com/lib/ref/experimental/pseudonymisation.html" />
+<meta property="og:url" content="https://docs.pymedphys.com/lib/howto/tunnels/rsync.html" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Pseudonymisation Tool" />
-<meta property="og:description" content="Pseudonymisation Tool    Summary  Pseudonymisation provides a list of identifying keywords that includes UIDs and an anonymisation strategy that utilises SHA3_2" />
+<meta property="og:title" content="Backups using rsync" />
+<meta property="og:description" content="Backups using rsync  Background  We want all data to have a “single source of truth”. As such, important data has its reference location at only one site. All d" />
 
 <meta property="og:image" content="https://docs.pymedphys.com/_static/pymedphys.svg" />
 
@@ -159,28 +159,28 @@
    Tutorials
   </a>
  </li>
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="../../howto/index.html">
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="../index.html">
    How-to Guides
   </a>
-  <ul class="collapse-ul">
+  <ul class="current collapse-ul">
    <li class="toctree-l2">
-    <a class="reference internal" href="../../howto/get-started.html">
+    <a class="reference internal" href="../get-started.html">
      Get Started
     </a>
    </li>
    <li class="toctree-l2 collapsible-parent">
-    <a class="reference internal" href="../../howto/gamma/index.html">
+    <a class="reference internal" href="../gamma/index.html">
      Gamma
     </a>
     <ul class="collapse-ul">
      <li class="toctree-l3">
-      <a class="reference internal" href="../../howto/gamma/effect-of-noise.html">
+      <a class="reference internal" href="../gamma/effect-of-noise.html">
        The Effects of Noise on Gamma
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../../howto/gamma/from-dicom.html">
+      <a class="reference internal" href="../gamma/from-dicom.html">
        Gamma from DICOM
       </a>
      </li>
@@ -189,22 +189,22 @@
     </i>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../howto/add-a-linac.html">
+    <a class="reference internal" href="../add-a-linac.html">
      Adding a Linac
     </a>
    </li>
-   <li class="toctree-l2 collapsible-parent">
-    <a class="reference internal" href="../../howto/tunnels/index.html">
+   <li class="toctree-l2 current active collapsible-parent">
+    <a class="reference internal" href="index.html">
      Tunnels
     </a>
-    <ul class="collapse-ul">
+    <ul class="current collapse-ul">
      <li class="toctree-l3">
-      <a class="reference internal" href="../../howto/tunnels/samba.html">
+      <a class="reference internal" href="samba.html">
        SAMBA SSH Tunnelling
       </a>
      </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../../howto/tunnels/rsync.html">
+     <li class="toctree-l3 current active">
+      <a class="current reference internal" href="#">
        Backups using rsync
       </a>
      </li>
@@ -216,48 +216,48 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 current active collapsible-parent">
-  <a class="reference internal" href="../index.html">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../../ref/index.html">
    Reference
   </a>
-  <ul class="current collapse-ul">
+  <ul class="collapse-ul">
    <li class="toctree-l2">
     <a class="reference internal" href="../../../genindex.html">
      Alphabetical Index
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../dicom.html">
+    <a class="reference internal" href="../../ref/dicom.html">
      DICOM
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../gamma.html">
+    <a class="reference internal" href="../../ref/gamma.html">
      Gamma
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../mosaiq.html">
+    <a class="reference internal" href="../../ref/mosaiq.html">
      Mosaiq
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../metersetmap.html">
+    <a class="reference internal" href="../../ref/metersetmap.html">
      MetersetMap
     </a>
    </li>
-   <li class="toctree-l2 current active collapsible-parent">
-    <a class="reference internal" href="index.html">
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../../ref/experimental/index.html">
      Experimental Modules
     </a>
-    <ul class="current collapse-ul">
+    <ul class="collapse-ul">
      <li class="toctree-l3">
-      <a class="reference internal" href="pinnacle.html">
+      <a class="reference internal" href="../../ref/experimental/pinnacle.html">
        Pinnacle Export Tool
       </a>
      </li>
-     <li class="toctree-l3 current active">
-      <a class="current reference internal" href="#">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../ref/experimental/pseudonymisation.html">
        Pseudonymisation Tool
       </a>
      </li>
@@ -464,9 +464,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../../_sources/lib/ref/experimental/pseudonymisation.rst"><button type="button"
+        <a class="dropdown-buttons" href="../../../_sources/lib/howto/tunnels/rsync.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -484,10 +484,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/pymedphys/pymedphys/issues/new?title=Issue%20on%20page%20%2Flib/ref/experimental/pseudonymisation.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/pymedphys/pymedphys/issues/new?title=Issue%20on%20page%20%2Flib/howto/tunnels/rsync.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/pymedphys/pymedphys/edit/main/lib/pymedphys/docs/lib/ref/experimental/pseudonymisation.rst"><button
+        <a class="edit-button" href="https://github.com/pymedphys/pymedphys/edit/main/lib/pymedphys/docs/lib/howto/tunnels/rsync.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -515,18 +515,28 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#summary">
-   Summary
+  <a class="reference internal nav-link" href="#background">
+   Background
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#api">
-   API
+  <a class="reference internal nav-link" href="#pre-requisites">
+   Pre-requisites
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#example">
-   Example
+  <a class="reference internal nav-link" href="#overview">
+   Overview
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#permanently-mount-the-samba-shares">
+   Permanently mount the SAMBA shares
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup-rsync-crontab">
+   Setup rsync crontab
   </a>
  </li>
 
@@ -551,75 +561,102 @@
             
               <div>
                 
-  <div class="section" id="module-pymedphys.experimental.pseudonymisation">
-<span id="pseudonymisation-tool"></span><h1>Pseudonymisation Tool<a class="headerlink" href="#module-pymedphys.experimental.pseudonymisation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="summary">
-<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><p>Pseudonymisation provides a list of identifying keywords that includes UIDs
-and an anonymisation strategy that utilises SHA3_256 to hash text which is then
-encoded as base64, or for UIDs, converted to an integer appended to the PyMedPhys Org Root.  Dates are shifted consistently and ages are jittered.
-The list of identifying keywords and the anonymisation strategy are passed in to
-the (non-experimental) anonymisation module/functions.</p>
-</div></blockquote>
+  <div class="section" id="backups-using-rsync">
+<h1>Backups using rsync<a class="headerlink" href="#backups-using-rsync" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>We want all data to have a “single source of truth”. As such, important data
+has its reference location at only one site. All day-to-day usage of that data
+is undergone via network traffic to that reference location. The downside of
+this is that a network interruption, such as the remote data storage location
+having a power outage, makes this data unavailable.</p>
+<p>As such, just-in-case, important remote datastores are synced locally. This
+document details an example of one such local sync.</p>
 </div>
-<div class="section" id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="pymedphys.experimental.pseudonymisation.pseudonymise">
-<code class="sig-prename descclassname"><span class="pre">pymedphys.experimental.pseudonymisation.</span></code><code class="sig-name descname"><span class="pre">pseudonymise</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dicom_input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pymedphys/_experimental/pseudonymisation.html#pseudonymise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymedphys.experimental.pseudonymisation.pseudonymise" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenient API to pseudonymisation.
-Elements whose tags are not in the pydicom dictionary will be deleted
-PatientSex will not be modified/pseudonymised
-For fine tune control, use anonymise_dataset() instead</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dicom_input</strong> (<code class="docutils literal notranslate"><span class="pre">pydicom.dataset.Dataset</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">pathlib.Path</span></code>) – Either a dataset, a path to a file or a path to a directory</p></li>
-<li><p><strong>output_path</strong> (<code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">pathlib.Path</span></code>, optional) – If the input is a file or a path, the directory to place the
-pseudonymised files, by default None</p></li>
+<div class="section" id="pre-requisites">
+<h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>SSH Tunnels forwarding through the SAMBA port of the remote file share</p>
+<ul>
+<li><p>For the purpose of this document it will be assumed that this share is
+accessible at <code class="docutils literal notranslate"><span class="pre">rccc-ssh/Physics</span></code> at port <code class="docutils literal notranslate"><span class="pre">44448</span></code>. The directory to be
+backed up is <code class="docutils literal notranslate"><span class="pre">Physics</span></code></p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>if the dicom_input was a dataset, return the pseudonymised dataset
-if the dicom input was a file, return the path to the pseudonymised file.
-if the dicom input was a directory, return the list of successfully
-anonymised files, and return that instead of None</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pydicom.dataset.Dataset</span></code> | <code class="docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pymedphys.experimental.pseudonymisation.get_default_pseudonymisation_keywords">
-<code class="sig-prename descclassname"><span class="pre">pymedphys.experimental.pseudonymisation.</span></code><code class="sig-name descname"><span class="pre">get_default_pseudonymisation_keywords</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pymedphys/_experimental/pseudonymisation.html#get_default_pseudonymisation_keywords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymedphys.experimental.pseudonymisation.get_default_pseudonymisation_keywords" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="pymedphys.experimental.pseudonymisation.is_valid_strategy_for_keywords">
-<code class="sig-prename descclassname"><span class="pre">pymedphys.experimental.pseudonymisation.</span></code><code class="sig-name descname"><span class="pre">is_valid_strategy_for_keywords</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifying_keywords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pymedphys/_experimental/pseudonymisation.html#is_valid_strategy_for_keywords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymedphys.experimental.pseudonymisation.is_valid_strategy_for_keywords" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pymedphys.experimental.pseudonymisation.pseudonymisation_dispatch">
-<code class="sig-prename descclassname"><span class="pre">pseudonymisation.</span></code><code class="sig-name descname"><span class="pre">pseudonymisation_dispatch</span></code><em class="property"> <span class="pre">strategy,</span> <span class="pre">i.e.</span> <span class="pre">dictionary</span> <span class="pre">of</span> <span class="pre">VR</span> <span class="pre">and</span> <span class="pre">function</span> <span class="pre">references</span> <span class="pre">for</span> <span class="pre">anonymisation</span> <span class="pre">to</span> <span class="pre">achieve</span> <span class="pre">pseudonymisation</span></em><a class="headerlink" href="#pymedphys.experimental.pseudonymisation.pseudonymisation_dispatch" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+</li>
+<li><p>A local SAMBA share for storing the backup</p>
+<ul>
+<li><p>For the purpose of this document it will be assumed that this share is
+accessible at <code class="docutils literal notranslate"><span class="pre">rccc-ssh/D</span></code>. The directory to back up to is
+<code class="docutils literal notranslate"><span class="pre">PhysicsDriveBackup</span></code></p></li>
+</ul>
+</li>
+<li><p>A username and password that is able to access both SAMBA shares</p>
+<ul>
+<li><p>For the purpose here, this username will be <code class="docutils literal notranslate"><span class="pre">pexit</span></code> and the remote share
+will be on the domain <code class="docutils literal notranslate"><span class="pre">nbccc</span></code>, and the local share will be on the domain
+<code class="docutils literal notranslate"><span class="pre">rccc</span></code>.</p></li>
+</ul>
+</li>
+<li><p>An Ubuntu 20.04 instance with access to both the forwarded SAMBA share and
+the local SAMBA share</p>
+<ul>
+<li><p>For the purpose here, this instance is a VM within Hyper-V with user login
+name <code class="docutils literal notranslate"><span class="pre">pexit</span></code>.</p></li>
+</ul>
+</li>
+</ul>
 </div>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymedphys.experimental.pseudonymisation</span> <span class="k">as</span> <span class="nn">pseudonymisation_api</span>
-
-<span class="n">pseudonymisation_api</span><span class="o">.</span><span class="n">pseudonymise</span><span class="p">(</span><span class="n">ds_input</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;/home/myname/pseudo_out/&quot;</span><span class="p">)</span>
-<span class="c1"># or</span>
-<span class="n">ds_pseudo</span> <span class="o">=</span> <span class="n">anonymise_dataset</span><span class="p">(</span><span class="n">ds_input</span><span class="p">,</span>
-    <span class="n">replacement_strategy</span><span class="o">=</span><span class="n">pseudonymisation_api</span><span class="o">.</span><span class="n">pseudonymisation_dispatch</span><span class="p">,</span>
-    <span class="n">identifying_keywords</span><span class="o">=</span><span class="n">pseudonymisation_api</span><span class="o">.</span><span class="n">get_default_pseudonymisation_keywords</span><span class="p">(),</span>
-<span class="p">)</span>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The general approach here will be to:</p>
+<ul class="simple">
+<li><p>Create the permanent SAMBA mount points via fstab</p></li>
+<li><p>Set up rsync to run via cron</p></li>
+</ul>
+</div>
+<div class="section" id="permanently-mount-the-samba-shares">
+<h2>Permanently mount the SAMBA shares<a class="headerlink" href="#permanently-mount-the-samba-shares" title="Permalink to this headline">¶</a></h2>
+<p>To begin, we need to create two mount points. On our machine this was done by
+running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo mkdir -p /media/rccc-ssh/D /media/tunnel-nbcc-pdc/Physics
 </pre></div>
 </div>
+<p>Then, to create the permanent mounts both <code class="docutils literal notranslate"><span class="pre">fstab</span></code> and <code class="docutils literal notranslate"><span class="pre">cifs-utils</span></code> were
+utilised. This was adapted from the instructions over at
+<a class="reference external" href="https://wiki.ubuntu.com/MountWindowsSharesPermanently">https://wiki.ubuntu.com/MountWindowsSharesPermanently</a>.</p>
+<p>Firstly <code class="docutils literal notranslate"><span class="pre">cifs-utils</span></code> was installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt install cifs-utils
+</pre></div>
+</div>
+<p>Next, a file at <code class="docutils literal notranslate"><span class="pre">~/.smbcredentials</span></code> was created with the contents:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>username=pexit
+password=YOUR_PASSWORD_GOES_HERE
+</pre></div>
+</div>
+<p>Then the read/write permissions of this file were set as such:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod <span class="m">600</span> .smbcredentials
+</pre></div>
+</div>
+<p>Next, the contents of <code class="docutils literal notranslate"><span class="pre">/etc/fstab</span></code> was updated to include the following:</p>
+<div class="highlight-fstab notranslate"><div class="highlight"><pre><span></span>//rccc-ssh/Physics  /media/tunnel-nbcc-pdc/Physics  cifs  user,uid=pexit,credentials=/home/pexit/.smbcredentials,domain=nbccc,iocharset=utf8,port=44448  0  0
+//rccc-ssh/D        /media/rccc-ssh/D               cifs  user,uid=pexit,credentials=/home/pexit/.smbcredentials,domain=rccc,iocharset=utf8              0  0
+</pre></div>
+</div>
+<p>These new mount points can be tested by running
+<code class="docutils literal notranslate"><span class="pre">mount</span> <span class="pre">/media/tunnel-nbcc-pdc/Physics</span></code> and <code class="docutils literal notranslate"><span class="pre">mount</span> <span class="pre">/media/rccc-ssh/D</span></code></p>
+</div>
+<div class="section" id="setup-rsync-crontab">
+<h2>Setup rsync crontab<a class="headerlink" href="#setup-rsync-crontab" title="Permalink to this headline">¶</a></h2>
+<p>These instructions for setting up <code class="docutils literal notranslate"><span class="pre">rsync</span></code> are adapted from
+<a class="reference external" href="https://www.howtogeek.com/135533/how-to-use-rsync-to-backup-your-data-on-linux/">https://www.howtogeek.com/135533/how-to-use-rsync-to-backup-your-data-on-linux/</a></p>
+<p>To set up the <code class="docutils literal notranslate"><span class="pre">crontab</span></code> run <code class="docutils literal notranslate"><span class="pre">crontab</span> <span class="pre">-e</span></code>, then append the following to the
+bottom of that file:</p>
+<div class="highlight-crontab notranslate"><div class="highlight"><pre><span></span>0 1 * * * mount /media/rccc-ssh/D ; mount /media/tunnel-nbcc-pdc/Physics ; timeout 4h rsync -av --delete /media/tunnel-nbcc-pdc/Physics/Physics/ /media/rccc-ssh/D/PhysicsDriveBackup/
+</pre></div>
+</div>
+<p>This will set up cron to make sure the appropriate directories are mounted and
+then runs <code class="docutils literal notranslate"><span class="pre">rsync</span></code> each night at 1 am. If the task hasn’t completed by 5 am it
+is stopped ready for it to continue the task on the following night.</p>
 </div>
 </div>
 
@@ -636,7 +673,7 @@ anonymised files, and return that instead of None</p>
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./lib/ref/experimental"
+            path: "./lib/howto/tunnels"
         },
         predefinedOutput: true
     }
@@ -657,7 +694,7 @@ anonymised files, and return that instead of None</p>
             <script type="text/javascript">
                 DiscourseEmbed = {
                     discourseUrl: 'https://pymedphys.discourse.group/',
-                    discourseEmbedUrl: 'https://docs.pymedphys.com/lib/ref/experimental/pseudonymisation'
+                    discourseEmbedUrl: 'https://docs.pymedphys.com/lib/howto/tunnels/rsync'
                 };
 
                 (function () {
@@ -669,8 +706,8 @@ anonymised files, and return that instead of None</p>
             
             <div class='prev-next-bottom'>
                 
-    <a class='left-prev' id="prev-link" href="pinnacle.html" title="previous page">Pinnacle Export Tool</a>
-    <a class='right-next' id="next-link" href="../../background/index.html" title="next page">Background</a>
+    <a class='left-prev' id="prev-link" href="samba.html" title="previous page">SAMBA SSH Tunnelling</a>
+    <a class='right-next' id="next-link" href="../../ref/index.html" title="next page">Reference</a>
 
             </div>
             

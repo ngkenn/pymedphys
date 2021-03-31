@@ -193,10 +193,24 @@
      Adding a Linac
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../lib/howto/samba-ssh-tunnelling.html">
-     SAMBA SSH Tunnelling
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../../lib/howto/tunnels/index.html">
+     Tunnels
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../lib/howto/tunnels/samba.html">
+       SAMBA SSH Tunnelling
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../lib/howto/tunnels/rsync.html">
+       Backups using rsync
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -538,36 +552,6 @@
     <a class="reference internal nav-link" href="#orchestrate">
      orchestrate
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#config-mosaiq-sql-csv">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         config_mosaiq_sql.csv
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#config-linac-details-csv">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         config_linac_details.csv
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#Positional Arguments_repeat3">
-       Positional Arguments
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#Named Arguments">
-       Named Arguments
-      </a>
-     </li>
-    </ul>
    </li>
   </ul>
  </li>
@@ -642,46 +626,8 @@
 <div class="section" id="orchestrate">
 <h3>orchestrate<a class="headerlink" href="#orchestrate" title="Permalink to this headline">¶</a></h3>
 <p>A command line interface for the management of trf files.</p>
-<p>Requires two configuration csv files detailed as following:</p>
-<div class="section" id="config-mosaiq-sql-csv">
-<h4><code class="docutils literal notranslate"><span class="pre">config_mosaiq_sql.csv</span></code><a class="headerlink" href="#config-mosaiq-sql-csv" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">,</span><span class="n">Timezone</span><span class="p">,</span><span class="n">Mosaiq</span> <span class="n">SQL</span> <span class="n">Server</span> <span class="p">(</span><span class="n">Hostname</span><span class="p">:</span><span class="n">Port</span><span class="p">)</span>
-<span class="n">a_centre</span><span class="p">,</span><span class="n">Australia</span><span class="o">/</span><span class="n">Sydney</span><span class="p">,</span><span class="n">mosaiq</span><span class="p">:</span><span class="mi">1433</span>
-<span class="n">another_centre</span><span class="p">,</span><span class="n">Australia</span><span class="o">/</span><span class="n">Sydney</span><span class="p">,</span><span class="n">another</span><span class="o">-</span><span class="n">mosaiq</span><span class="p">:</span><span class="mi">1433</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pymedphys</span> <span class="n">trf</span> <span class="n">orchestrate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
-</div>
-</div>
-<div class="section" id="config-linac-details-csv">
-<h4><code class="docutils literal notranslate"><span class="pre">config_linac_details.csv</span></code><a class="headerlink" href="#config-linac-details-csv" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">,</span><span class="n">Centre</span><span class="p">,</span><span class="n">IP</span>
-<span class="mi">1234</span><span class="p">,</span><span class="n">a_centre</span><span class="p">,</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">150.40</span>
-<span class="mi">1236</span><span class="p">,</span><span class="n">a_centre</span><span class="p">,</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">150.41</span>
-<span class="mi">1238</span><span class="p">,</span><span class="n">another_centre</span><span class="p">,</span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.40</span>
-</pre></div>
-</div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pymedphys</span> <span class="n">trf</span> <span class="n">orchestrate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">m</span> <span class="n">MOSAIQ_SQL</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="n">LINAC_DETAILS</span><span class="p">]</span>
-                          <span class="n">data_directory</span>
-</pre></div>
-</div>
-<div class="section" id="Positional Arguments_repeat3">
-<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
-<dl class="option-list">
-<dt><kbd>data_directory</kbd></dt>
-<dd><p>The path for storing the indexed log files.</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="Named Arguments">
-<h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h4>
-<dl class="option-list">
-<dt><kbd>-m, --mosaiq_sql</kbd></dt>
-<dd><p>Define a custom path for the Mosaiq SQL configuration file. Defaults to <code class="docutils literal notranslate"><span class="pre">{data_directory}/config_mosaiq_sql.csv</span></code></p>
-</dd>
-<dt><kbd>-l, --linac_details</kbd></dt>
-<dd><p>Define a custom path for the Linac configuration file. Defaults to <code class="docutils literal notranslate"><span class="pre">{data_directory}/config_linac_details.csv</span></code></p>
-</dd>
-</dl>
 </div>
 </div>
 </div>
