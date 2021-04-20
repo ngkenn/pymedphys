@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Background &#8212; PyMedPhys</title>
+    <title>TRF &#8212; PyMedPhys</title>
     
   <link rel="stylesheet" href="../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -56,12 +56,12 @@
         const thebe_selector_output = ".output,.cell_output"
     </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <link rel="canonical" href="https://docs.pymedphys.com/lib/background/index.html" />
+    <link rel="canonical" href="https://docs.pymedphys.com/lib/ref/trf.html" />
     <link rel="shortcut icon" href="../../_static/pymedphys.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Automatic Contouring Project" href="autocontouring.html" />
-    <link rel="prev" title="Pseudonymisation Tool" href="../ref/experimental/pseudonymisation.html" />
+    <link rel="next" title="Experimental Modules" href="experimental/index.html" />
+    <link rel="prev" title="MetersetMap" href="metersetmap.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -78,10 +78,10 @@
 
 
 <!-- Opengraph tags -->
-<meta property="og:url" content="https://docs.pymedphys.com/lib/background/index.html" />
+<meta property="og:url" content="https://docs.pymedphys.com/lib/ref/trf.html" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Background" />
-<meta property="og:description" content="Background  Automatic Contouring Project  Elekta Logfile Decoding and Indexing" />
+<meta property="og:title" content="TRF" />
+<meta property="og:description" content="TRF  Summary    API  Work with Elekta Linac Agility Head TRFs    pymedphys.trf.read(trf: Union[BinaryIO, os.PathLike[Any]]) -&gt; Tuple[pandas.core.frame.DataFrame" />
 
 <meta property="og:image" content="https://docs.pymedphys.com/_static/pymedphys.svg" />
 
@@ -216,53 +216,53 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="../ref/index.html">
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="index.html">
    Reference
   </a>
-  <ul class="collapse-ul">
+  <ul class="current collapse-ul">
    <li class="toctree-l2">
     <a class="reference internal" href="../../genindex.html">
      Alphabetical Index
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../ref/dicom.html">
+    <a class="reference internal" href="dicom.html">
      DICOM
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../ref/gamma.html">
+    <a class="reference internal" href="gamma.html">
      Gamma
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../ref/mosaiq.html">
+    <a class="reference internal" href="mosaiq.html">
      Mosaiq
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../ref/metersetmap.html">
+    <a class="reference internal" href="metersetmap.html">
      MetersetMap
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../ref/trf.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      TRF
     </a>
    </li>
    <li class="toctree-l2 collapsible-parent">
-    <a class="reference internal" href="../ref/experimental/index.html">
+    <a class="reference internal" href="experimental/index.html">
      Experimental Modules
     </a>
     <ul class="collapse-ul">
      <li class="toctree-l3">
-      <a class="reference internal" href="../ref/experimental/pinnacle.html">
+      <a class="reference internal" href="experimental/pinnacle.html">
        Pinnacle Export Tool
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../ref/experimental/pseudonymisation.html">
+      <a class="reference internal" href="experimental/pseudonymisation.html">
        Pseudonymisation Tool
       </a>
      </li>
@@ -274,18 +274,18 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 current active collapsible-parent">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../background/index.html">
    Background
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2">
-    <a class="reference internal" href="autocontouring.html">
+    <a class="reference internal" href="../background/autocontouring.html">
      Automatic Contouring Project
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="elekta-logfiles.html">
+    <a class="reference internal" href="../background/elekta-logfiles.html">
      Elekta Logfile Decoding and Indexing
     </a>
    </li>
@@ -469,7 +469,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/lib/background/index.rst"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/lib/ref/trf.rst"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
@@ -489,10 +489,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/pymedphys/pymedphys/issues/new?title=Issue%20on%20page%20%2Flib/background/index.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/pymedphys/pymedphys/issues/new?title=Issue%20on%20page%20%2Flib/ref/trf.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/pymedphys/pymedphys/edit/main/lib/pymedphys/docs/lib/background/index.rst"><button
+        <a class="edit-button" href="https://github.com/pymedphys/pymedphys/edit/main/lib/pymedphys/docs/lib/ref/trf.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -512,6 +512,44 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+                
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-pymedphys.trf">
+   Summary
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#api">
+   API
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#work-with-elekta-linac-agility-head-trfs">
+     Work with Elekta Linac Agility Head TRFs
+    </a>
+   </li>
+  </ul>
+ </li>
+
+                <li class="toc-h2 nav-item toc-entry">
+                    <a class="reference internal nav-link" href="#comments">
+                        Comments
+                    </a>
+                    <ul class="nav section-nav flex-column">
+                    </ul>
+                </li>
+            </ul>
+            </ul>
+
+        </nav>
+        
+        
         </div>
     </div>
 </div>
@@ -520,13 +558,76 @@
             
               <div>
                 
-  <div class="section" id="background">
-<h1>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="autocontouring.html">Automatic Contouring Project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elekta-logfiles.html">Elekta Logfile Decoding and Indexing</a></li>
+  <div class="section" id="trf">
+<h1>TRF<a class="headerlink" href="#trf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-pymedphys.trf">
+<span id="summary"></span><h2>Summary<a class="headerlink" href="#module-pymedphys.trf" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="work-with-elekta-linac-agility-head-trfs">
+<h3>Work with Elekta Linac Agility Head TRFs<a class="headerlink" href="#work-with-elekta-linac-agility-head-trfs" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="pymedphys.trf.read">
+<code class="sig-prename descclassname"><span class="pre">pymedphys.trf.</span></code><code class="sig-name descname"><span class="pre">read</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">BinaryIO</span><span class="p"><span class="pre">,</span> </span><span class="pre">os.PathLike</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#pymedphys.trf.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an Elekta Linac Agility Head TRF into a Pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>trf</strong> (<em>Union</em><em>[</em><em>BinaryIO</em><em>, </em><em>os.PathLike</em><em>[</em><em>Any</em><em>]</em><em>]</em>) – Either a file-like object or a pathlike object pointing to
+either the file location on disk, or the binary contents of a
+given TRF.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Two DataFrames, the first being the TRF header information, the
+second being the TRF table content.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[pd.DataFrame, pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pymedphys.trf.identify">
+<code class="sig-prename descclassname"><span class="pre">pymedphys.trf.</span></code><code class="sig-name descname"><span class="pre">identify</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pymedphys._mosaiq.connect.Connection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pymedphys.trf.identify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query a Mosaiq database to associate a TRF with its corresponding
+delivery and therefore its patient information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection</strong> (<em>pymedphys.mosaiq.Connection</em>) – A connection instance to the Mosaiq MSSQL database. Only
+requirement is that it is a <a class="reference external" href="https://www.python.org/dev/peps/pep-0249/#connection-objects">PEP-0249</a>
+compliant <code class="docutils literal notranslate"><span class="pre">connection</span></code> object.</p></li>
+<li><p><strong>filepath</strong> (<em>pathlib.Path</em>) – Path to the TRF</p></li>
+<li><p><strong>timezone</strong> (<em>str</em>) – The timezone that matches the Mosaiq MSSQL instance being queried.
+This is utilised internally to convert the TRF’s UTC timestamp
+to a timestamp that matches the time of delivery in Mosaiq.
+The conversion happens utilising
+<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DatetimeIndex.tz_convert.html#pandas.DatetimeIndex.tz_convert">tz_convert</a>
+within the Pandas library. So anything that its <cite>tz</cite> parameter
+accepts can be provided here.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>An <code class="docutils literal notranslate"><span class="pre">attrs</span></code> class that has the following attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">patient_id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">field_id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">last_name</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">first_name</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qa_mode</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">field_type</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">beam_completed</span></code></p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>OISDeliveryDetails</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 </div>
 
@@ -543,7 +644,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./lib/background"
+            path: "./lib/ref"
         },
         predefinedOutput: true
     }
@@ -564,7 +665,7 @@
             <script type="text/javascript">
                 DiscourseEmbed = {
                     discourseUrl: 'https://pymedphys.discourse.group/',
-                    discourseEmbedUrl: 'https://docs.pymedphys.com/lib/background/index'
+                    discourseEmbedUrl: 'https://docs.pymedphys.com/lib/ref/trf'
                 };
 
                 (function () {
@@ -576,8 +677,8 @@
             
             <div class='prev-next-bottom'>
                 
-    <a class='left-prev' id="prev-link" href="../ref/experimental/pseudonymisation.html" title="previous page">Pseudonymisation Tool</a>
-    <a class='right-next' id="next-link" href="autocontouring.html" title="next page">Automatic Contouring Project</a>
+    <a class='left-prev' id="prev-link" href="metersetmap.html" title="previous page">MetersetMap</a>
+    <a class='right-next' id="next-link" href="experimental/index.html" title="next page">Experimental Modules</a>
 
             </div>
             
