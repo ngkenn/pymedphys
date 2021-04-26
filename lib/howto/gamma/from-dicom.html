@@ -783,13 +783,13 @@ Current distance: 0.00 mm | Number of reference points remaining: 106910 | Point
 
 <span class="n">pass_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">valid_gamma</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_gamma</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Local Gamma (0.5%/0.5mm) | Percent Pass: </span><span class="si">{0:.2f}</span><span class="s2"> %&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pass_ratio</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Local Gamma (</span><span class="si">{</span><span class="n">gamma_options</span><span class="p">[</span><span class="s1">&#39;dose_percent_threshold&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">%/</span><span class="si">{</span><span class="n">gamma_options</span><span class="p">[</span><span class="s1">&#39;distance_mm_threshold&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">mm) | Percent Pass: </span><span class="si">{</span><span class="n">pass_ratio</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> %&quot;</span><span class="p">)</span>
 <span class="c1"># plt.savefig(&#39;gamma_hist.png&#39;, dpi=300)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Local Gamma (0.5%/0.5mm) | Percent Pass: 100.00 %&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Local Gamma (1%/1mm) | Percent Pass: 100.00 %&#39;)
 </pre></div>
 </div>
 <img alt="../../../_images/from-dicom_15_1.png" src="../../../_images/from-dicom_15_1.png" />
