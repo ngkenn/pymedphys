@@ -164,7 +164,7 @@ def convert_plan(plan, export_path):
 
     for beam_count, beam in enumerate(beam_list):
         # print(beam_list)
-        with open("/home/neil/vanek_beam.json", "w") as tfile:
+        with open("/home/neil/beam.json", "w") as tfile:
             print("beam_baby")
             json.dump(beam, tfile)
         print("should be 2")
@@ -252,10 +252,10 @@ def convert_plan(plan, export_path):
 
             metersetweight.append(cp["Weight"])
 
-            x1 = -cp["LeftJawPosition"] * 10
-            x2 = cp["RightJawPosition"] * 10
-            y2 = cp["TopJawPosition"] * 10
-            y1 = -cp["BottomJawPosition"] * 10
+            x1 = -cp["RightJawPosition"] * 10
+            x2 = cp["LeftJawPosition"] * 10
+            y1 = -cp["TopJawPosition"] * 10
+            y2 = cp["BottomJawPosition"] * 10
 
             points = cp["MLCLeafPositions"]["RawData"]["Points[]"].split(",")
             p_count = 0
@@ -273,12 +273,8 @@ def convert_plan(plan, export_path):
                 if p_count == len(points):
                     leafpositions1 = list(reversed(leafpositions1))
                     leafpositions2 = list(reversed(leafpositions2))
-                    # leafpositions[cp_num] = leafpositions1 + leafpositions2
                     leafpositions = leafpositions1 + leafpositions2
-                    # print(leafpositions1)
-                    # print(leafpositions2)
-            print(f"X: {[x1, x2]}")
-            print(f"Y: {[y1, y2]}")
+
             gantryangle = cp["Gantry"]
             colangle = cp["Collimator"]
             psupportangle = cp["Couch"]
@@ -1218,8 +1214,9 @@ def mapBeamControlPointSequence(
     y2,
     is_stepwise,
 ):
-    print(leafpositions)
     print(ctrlpt_index)
+    print(f"X: {[x1, x2]}")
+    print(f"Y: {[y1, y2]}")
     # append a controlpointsequence to the dicom dataset
     beam_sequence.ControlPointSequence.append(pydicom.dataset.Dataset())
     # set the current control point sequence
