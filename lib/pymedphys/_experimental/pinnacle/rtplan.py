@@ -43,7 +43,7 @@ import re
 import time
 import json
 from pymedphys._imports import pydicom
-
+from typing import Dict, List
 from .constants import (
     GImplementationClassUID,
     GTransferSyntaxUID,
@@ -164,11 +164,8 @@ def convert_plan(plan, export_path):
 
     for beam_count, beam in enumerate(beam_list):
         # print(beam_list)
-        with open("/home/neil/beam.json", "w") as tfile:
-            print("beam_baby")
+        with open(f"/home/neil/{ds.PatientID}_beam.json", "w") as tfile:
             json.dump(beam, tfile)
-        print("should be 2")
-        print(beam_count)
 
         ds.PatientSetupSequence.append(pydicom.dataset.Dataset())
 
@@ -201,6 +198,8 @@ def convert_plan(plan, export_path):
 
         beam_sequence.BeamName = beam["FieldID"]
         beam_sequence.BeamDescription = beam["Name"]
+
+        beam_ssd = beam["SSD"]
 
         if "Photons" in beam["Modality"]:
             beam_sequence.RadiationType = "PHOTON"
@@ -243,17 +242,22 @@ def convert_plan(plan, export_path):
             cp_manager = beam["CPManager"]
 
         numctrlpts = cp_manager["NumberOfControlPoints"]
-        currentmeterset = 0.0
+
         cumulativeMetersetWeight = 0.0
-        metercount = 0
         plan.logger.debug("Number of control points: %s", numctrlpts)
 
+        # CONTROL POINTS
         # Loop through the cp indices and map them to dicom
         for cp_index, cp in enumerate(cp_manager["ControlPointList"]):
 
             metersetweight.append(cp["Weight"])
             currentMetersetWeight = cp["Weight"]
 
+            cp_ssd = (
+                beam_ssd * 10
+            )  # TODO review. This is wrong - the SSD changes each CP
+
+            # TODO round to ints?
             x1 = -cp["RightJawPosition"] * 10
             x2 = cp["LeftJawPosition"] * 10
             y1 = -cp["TopJawPosition"] * 10
@@ -280,75 +284,15 @@ def convert_plan(plan, export_path):
             gantryangle = cp["Gantry"]
             colangle = cp["Collimator"]
             psupportangle = cp["Couch"]
-            numwedges = 0
-            if (
-                cp["WedgeContext"]["WedgeName"] == "No Wedge"
-                or cp["WedgeContext"]["WedgeName"] == ""
-            ):
-                # wedgeflag = False
-                plan.logger.debug("Wedge is no name")
-                numwedges = 0
-            elif (
-                "edw" in cp["WedgeContext"]["WedgeName"]
-                or "EDW" in cp["WedgeContext"]["WedgeName"]
-            ):
-                plan.logger.debug("Wedge present")
-                wedgetype = "DYNAMIC"
-                # wedgeflag = True
-                numwedges = 1
-                wedgeangle = cp["WedgeContext"]["Angle"]
-                wedgeinorout = ""
-                wedgeinorout = cp["WedgeContext"]["Orientation"]
-                if wedgeinorout == "WedgeBottomToTop":
-                    wedgename = (
-                        f"{cp['WedgeContext']['WedgeName'].upper()}{wedgeangle}IN"
-                    )
-                    wedgeorientation = (
-                        "0"  # temporary until I find out what to put here
-                    )
-                elif wedgeinorout == "WedgeTopToBottom":
-                    wedgename = (
-                        f"{cp['WedgeContext']['WedgeName'].upper()}{wedgeangle}OUT"
-                    )
-                    wedgeorientation = "180"
-                plan.logger.debug("Wedge name = %s", wedgename)
-            elif "UP" in cp["WedgeContext"]["WedgeName"]:
-                plan.logger.debug("Wedge present")
-                wedgetype = "STANDARD"
-                # wedgeflag = True
-                numwedges = 1
-                wedgeangle = cp["WedgeContext"]["Angle"]
-                wedgeinorout = ""
-                wedgeinorout = cp["WedgeContext"]["Orientation"]
-                if int(wedgeangle) == 15:
-                    numberinname = "30"
-                elif int(wedgeangle) == 45:
-                    numberinname = "20"
-                elif int(wedgeangle) == 30:
-                    numberinname = "30"
-                elif int(wedgeangle) == 60:
-                    numberinname = "15"
-                if wedgeinorout == "WedgeRightToLeft":
-                    wedgename = f"W{int(wedgeangle)}R{numberinname}"
-                    wedgeorientation = (
-                        "90"  # temporary until I find out what to put here
-                    )
-                elif wedgeinorout == "WedgeLeftToRight":
-                    wedgename = f"W{int(wedgeangle)}L{numberinname}"
-                    wedgeorientation = "270"
-                elif wedgeinorout == "WedgeTopToBottom":
-                    wedgename = f"W{int(wedgeangle)}OUT{numberinname}"
-                    wedgeorientation = (
-                        "180"  # temporary until I find out what to put here
-                    )
-                elif wedgeinorout == "WedgeBottomToTop":
-                    wedgename = f"W{int(wedgeangle)}IN{numberinname}"
-                    wedgeorientation = (
-                        "0"  # temporary until I find out what to put here
-                    )
-                plan.logger.debug("Wedge name = %s", wedgename)
 
-            # TODO
+            (
+                numwedges,
+                wedgename,
+                wedgeorientation,
+                wedgeangle,
+                wedgetype,
+            ) = getWedgeInfo(cp, plan)
+
             # Get the prescription for this beam
             prescription = [
                 p
@@ -420,36 +364,35 @@ def convert_plan(plan, export_path):
             ):  # TODO What to do if DoseRate isn't available in Beam?
                 doserate = beam["DoseRate"]
 
-            # TODO
-
             beam_sequence = mapBeamDeviceLimitingSequence(beam_sequence, n_points)
 
-            if (
-                "STEP" in beam["SetBeamType"].upper()
-                and "SHOOT" in beam["SetBeamType"].upper()
-            ):
-                print("STEP BABAY")
+            # TODO work out what to do with stepped beams
+            # if (
+            #     "STEP" in beam["SetBeamType"].upper()
+            #     and "SHOOT" in beam["SetBeamType"].upper()
+            # ):
+            #     print("STEP BABAY")
 
-                ctrlpt_range = numctrlpts * 2
-                is_stepwise = True
+            #     ctrlpt_range = numctrlpts * 2
+            #     is_stepwise = True
 
-                if cp_index % 2 == 1:
-                    currentmeterset = currentmeterset + float(
-                        metersetweight[metercount]
-                    )
-                    metercount += 1
+            #     if cp_index % 2 == 1:
+            #         currentmeterset = currentmeterset + float(
+            #             metersetweight[metercount]
+            #         )
+            #         metercount += 1
 
-            else:
-                print("NOT STEPWISE")
-                ctrlpt_range = numctrlpts
-                is_stepwise = False
+            # else:
+            #     print("NOT STEPWISE")
+            #     ctrlpt_range = numctrlpts
+            #     is_stepwise = False
 
             # for ctrlpt_index in range(0, ctrlpt_range):
             beam_sequence = mapBeamControlPointSequence(
                 cp_index,
-                beam,
                 beam_sequence,
                 beam_energy,
+                cp_ssd,
                 doserate,
                 leafpositions,
                 plan.iso_center,
@@ -458,14 +401,12 @@ def convert_plan(plan, export_path):
                 colangle,
                 psupportangle,
                 numwedges,
-                numctrlpts,
                 cumulativeMetersetWeight,
                 currentMetersetWeight,
                 x1,
                 x2,
                 y1,
                 y2,
-                is_stepwise,
             )
 
             cumulativeMetersetWeight += currentMetersetWeight
@@ -573,6 +514,9 @@ def mapBeamWedgeSequence():
 
 
 def mapBeamDeviceLimitingSequence(beam_sequence, n_points):
+    """
+    Appends the relevant BeamLimitingDevice Sequence objects to the supplied beam_sequence object
+    """
     beam_sequence.BeamLimitingDeviceSequence = pydicom.sequence.Sequence()
     beam_sequence.BeamLimitingDeviceSequence.append(pydicom.dataset.Dataset())
     beam_sequence.BeamLimitingDeviceSequence.append(pydicom.dataset.Dataset())
@@ -652,30 +596,30 @@ def mapBeamDeviceLimitingSequence(beam_sequence, n_points):
 
 
 def mapBeamControlPointSequence(
-    ctrlpt_index,
-    beam,
-    beam_sequence,
-    beam_energy,
-    doserate,
-    leafpositions,
-    iso_center,
-    gantryrotdir,
-    gantryangle,
-    colangle,
-    psupportangle,
-    numwedges,
-    numctrlpts,
-    cumulativeMetersetWeight,
-    currentMetersetWeight,
-    x1,
-    x2,
-    y1,
-    y2,
-    is_stepwise,
-):
-    print(ctrlpt_index)
-    print(f"X: {[x1, x2]}")
-    print(f"Y: {[y1, y2]}")
+    ctrlpt_index: int,
+    beam_sequence: pydicom.dataset.Dataset,
+    beam_energy: int,
+    sourceToSurfaceDistance: float,
+    doserate: int,
+    leafpositions: List,
+    iso_center: str,
+    gantryrotdir: str,
+    gantryangle: float,
+    colangle: float,
+    psupportangle: float,
+    numwedges: int,
+    cumulativeMetersetWeight: float,
+    currentMetersetWeight: float,
+    x1: int,
+    x2: int,
+    y1: int,
+    y2: int,
+) -> pydicom.dataset.Dataset:
+    """
+    Map the controlpoint sequences of a beam to a DICOM dataset.
+    Called for each controlpoint in the beam
+    Returns the supplied beam_sequence DICOM dataset with the appended controlpointsequence
+    """
     # append a controlpointsequence to the dicom dataset
     beam_sequence.ControlPointSequence.append(pydicom.dataset.Dataset())
     # set the current control point sequence
@@ -694,12 +638,7 @@ def mapBeamControlPointSequence(
         pydicom.dataset.Dataset()
     )
 
-    # if is_stepwise and ctrlpt_index % 2 == 1:  # odd number control point
-    #     if not metercount:
-    #         metercount = 1
-    #     currentmeterset = currentmeterset + float(metersetweight[metercount])
-    #     metercount += 1
-
+    # set cumulative and current metersetweight
     currControlPointSequence.CumulativeMetersetWeight = cumulativeMetersetWeight
     currControlPointSequence.ReferencedDoseReferenceSequence[
         0
@@ -753,7 +692,7 @@ def mapBeamControlPointSequence(
 
     currControlPointSequence.GantryAngle = gantryangle
     currControlPointSequence.GantryRotationDirection = gantryrotdir
-    currControlPointSequence.SourceToSurfaceDistance = beam["SSD"] * 10
+    currControlPointSequence.SourceToSurfaceDistance = sourceToSurfaceDistance
 
     if ctrlpt_index == 0:  # first control point beam meterset always zero
         currControlPointSequence.NominalBeamEnergy = beam_energy
@@ -782,3 +721,67 @@ def mapBeamControlPointSequence(
         currControlPointSequence.IsocenterPosition = iso_center
 
     return beam_sequence
+
+
+def getWedgeInfo(cp, plan):
+    numwedges = 0
+    wedgename = ""
+    wedgeorientation = ""
+    wedgeangle = ""
+    wedgetype = ""
+    if (
+        cp["WedgeContext"]["WedgeName"] == "No Wedge"
+        or cp["WedgeContext"]["WedgeName"] == ""
+    ):
+        # wedgeflag = False
+        plan.logger.debug("Wedge is no name")
+        numwedges = 0
+    elif (
+        "edw" in cp["WedgeContext"]["WedgeName"]
+        or "EDW" in cp["WedgeContext"]["WedgeName"]
+    ):
+        plan.logger.debug("Wedge present")
+        wedgetype = "DYNAMIC"
+        # wedgeflag = True
+        numwedges = 1
+        wedgeangle = cp["WedgeContext"]["Angle"]
+        wedgeinorout = ""
+        wedgeinorout = cp["WedgeContext"]["Orientation"]
+        if wedgeinorout == "WedgeBottomToTop":
+            wedgename = f"{cp['WedgeContext']['WedgeName'].upper()}{wedgeangle}IN"
+            wedgeorientation = "0"  # temporary until I find out what to put here
+        elif wedgeinorout == "WedgeTopToBottom":
+            wedgename = f"{cp['WedgeContext']['WedgeName'].upper()}{wedgeangle}OUT"
+            wedgeorientation = "180"
+        plan.logger.debug("Wedge name = %s", wedgename)
+    elif "UP" in cp["WedgeContext"]["WedgeName"]:
+        plan.logger.debug("Wedge present")
+        wedgetype = "STANDARD"
+        # wedgeflag = True
+        numwedges = 1
+        wedgeangle = cp["WedgeContext"]["Angle"]
+        wedgeinorout = ""
+        wedgeinorout = cp["WedgeContext"]["Orientation"]
+        if int(wedgeangle) == 15:
+            numberinname = "30"
+        elif int(wedgeangle) == 45:
+            numberinname = "20"
+        elif int(wedgeangle) == 30:
+            numberinname = "30"
+        elif int(wedgeangle) == 60:
+            numberinname = "15"
+        if wedgeinorout == "WedgeRightToLeft":
+            wedgename = f"W{int(wedgeangle)}R{numberinname}"
+            wedgeorientation = "90"  # temporary until I find out what to put here
+        elif wedgeinorout == "WedgeLeftToRight":
+            wedgename = f"W{int(wedgeangle)}L{numberinname}"
+            wedgeorientation = "270"
+        elif wedgeinorout == "WedgeTopToBottom":
+            wedgename = f"W{int(wedgeangle)}OUT{numberinname}"
+            wedgeorientation = "180"  # temporary until I find out what to put here
+        elif wedgeinorout == "WedgeBottomToTop":
+            wedgename = f"W{int(wedgeangle)}IN{numberinname}"
+            wedgeorientation = "0"  # temporary until I find out what to put here
+        plan.logger.debug("Wedge name = %s", wedgename)
+
+    return numwedges, wedgename, wedgeorientation, wedgeangle, wedgetype
