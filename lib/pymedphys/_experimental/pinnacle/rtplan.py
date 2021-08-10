@@ -162,10 +162,18 @@ def convert_plan(plan, export_path):
         plan.logger.warning("No Beams found in Trial. Unable to generate RTPLAN.")
         return
 
+    # with open(f"/home/neil/{ds.PatientID}_plan/trial.json", "w") as tfile:
+    #     json.dump(trial_info, tfile)
+    # with open(f"/home/neil/{ds.PatientID}_plan/plan_info.json", "w") as tfile:
+    #     json.dump(plan_info, tfile)
+    # with open(f"/home/neil/{ds.PatientID}_plan/image_info.json", "w") as tfile:
+    #     json.dump(image_info, tfile)
+    # with open(f"/home/neil/{ds.PatientID}_plan/machine_info.json", "w") as tfile:
+    #     json.dump(machine_info, tfile)
     for beam_count, beam in enumerate(beam_list):
         # print(beam_list)
-        with open(f"/home/neil/{ds.PatientID}_beam.json", "w") as tfile:
-            json.dump(beam, tfile)
+        # with open(f"/home/neil/{ds.PatientID}_beam.json", "w") as tfile:
+        #     json.dump(beam, tfile)
 
         ds.PatientSetupSequence.append(pydicom.dataset.Dataset())
 
@@ -339,6 +347,7 @@ def convert_plan(plan, export_path):
                 ds.FractionGroupSequence[0].ReferencedBeamSequence[
                     beam_count
                 ].BeamMeterset = prescripdose / (normdose * dose_per_mu_at_cal)
+                beammeterset = prescripdose / (normdose * dose_per_mu_at_cal)
 
             gantryrotdir = "NONE"
             if (
@@ -364,9 +373,11 @@ def convert_plan(plan, export_path):
             ):  # TODO What to do if DoseRate isn't available in Beam?
                 doserate = beam["DoseRate"]
 
-            beam_sequence = mapBeamDeviceLimitingSequence(beam_sequence, n_points)
+            beam_sequence = mapBeamDeviceLimitingSequence(
+                beam_sequence, n_points, machine_info
+            )
 
-            # TODO work out what to do with stepped beams
+            # # TODO work out what to do with stepped beams
             # if (
             #     "STEP" in beam["SetBeamType"].upper()
             #     and "SHOOT" in beam["SetBeamType"].upper()
@@ -513,83 +524,53 @@ def mapBeamWedgeSequence():
     pass
 
 
-def mapBeamDeviceLimitingSequence(beam_sequence, n_points):
+def mapBeamDeviceLimitingSequence(beam_sequence, n_points, machine_info):
     """
     Appends the relevant BeamLimitingDevice Sequence objects to the supplied beam_sequence object
     """
+
+    sourceToLeftRightDistance = machine_info["SourceToLeftRightJawDistance"]
+    sourceToTopBottomDistance = machine_info["SourceToTopBottomJawDistance"]
+    sourceToMLCDistance = machine_info["MultiLeaf"]["SourceToMLCDistance"]
+
     beam_sequence.BeamLimitingDeviceSequence = pydicom.sequence.Sequence()
     beam_sequence.BeamLimitingDeviceSequence.append(pydicom.dataset.Dataset())
     beam_sequence.BeamLimitingDeviceSequence.append(pydicom.dataset.Dataset())
     beam_sequence.BeamLimitingDeviceSequence.append(pydicom.dataset.Dataset())
     beam_sequence.BeamLimitingDeviceSequence[0].RTBeamLimitingDeviceType = "ASYMX"
+    beam_sequence.BeamLimitingDeviceSequence[0].SourceToBeamLimitingDeviceDistance = (
+        sourceToLeftRightDistance * 10
+    )
     beam_sequence.BeamLimitingDeviceSequence[1].RTBeamLimitingDeviceType = "ASYMY"
+    beam_sequence.BeamLimitingDeviceSequence[1].SourceToBeamLimitingDeviceDistance = (
+        sourceToTopBottomDistance * 10
+    )
     beam_sequence.BeamLimitingDeviceSequence[2].RTBeamLimitingDeviceType = "MLCX"
+    beam_sequence.BeamLimitingDeviceSequence[2].SourceToBeamLimitingDeviceDistance = (
+        sourceToMLCDistance * 10
+    )
     beam_sequence.BeamLimitingDeviceSequence[0].NumberOfLeafJawPairs = "1"
     beam_sequence.BeamLimitingDeviceSequence[1].NumberOfLeafJawPairs = "1"
     beam_sequence.BeamLimitingDeviceSequence[2].NumberOfLeafJawPairs = n_points / 2
-    bounds = [
-        "-200",
-        "-190",
-        "-180",
-        "-170",
-        "-160",
-        "-150",
-        "-140",
-        "-130",
-        "-120",
-        "-110",
-        "-100",
-        "-95",
-        "-90",
-        "-85",
-        "-80",
-        "-75",
-        "-70",
-        "-65",
-        "-60",
-        "-55",
-        "-50",
-        "-45",
-        "-40",
-        "-35",
-        "-30",
-        "-25",
-        "-20",
-        "-15",
-        "-10",
-        "-5",
-        "0",
-        "5",
-        "10",
-        "15",
-        "20",
-        "25",
-        "30",
-        "35",
-        "40",
-        "45",
-        "50",
-        "55",
-        "60",
-        "65",
-        "70",
-        "75",
-        "80",
-        "85",
-        "90",
-        "95",
-        "100",
-        "110",
-        "120",
-        "130",
-        "140",
-        "150",
-        "160",
-        "170",
-        "180",
-        "190",
-        "200",
-    ]
+
+    leafPairList = machine_info["MultiLeaf"]["LeafPairList"]
+    bounds = []
+    for leaf_count, leaf in enumerate(leafPairList):
+        leaf_width = leaf["Width"]
+
+        if leaf_count == 0:
+            # We don't get given the explicit boundary positions in the machine_info
+            # instead we get the leafcenter position and the leaf width
+            # so for the first leaf, we set the max boundary value, then append that + width for all leaves
+            leaf_center = leaf["YCenterPosition"]
+            leaf_max_boundary = leaf_center - (leaf_width / 2)
+            bounds.append(leaf_max_boundary * 10)
+            curr_boundary = leaf_max_boundary
+
+        # Increment curr_boundary with current leaf width, append to bounds
+        curr_boundary += leaf_width
+        bounds.append(curr_boundary * 10)
+
     beam_sequence.BeamLimitingDeviceSequence[2].LeafPositionBoundaries = bounds
 
     return beam_sequence
