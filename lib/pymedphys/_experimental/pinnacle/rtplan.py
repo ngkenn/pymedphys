@@ -162,18 +162,34 @@ def convert_plan(plan, export_path):
         plan.logger.warning("No Beams found in Trial. Unable to generate RTPLAN.")
         return
 
-    # with open(f"/home/neil/{ds.PatientID}_plan/trial.json", "w") as tfile:
-    #     json.dump(trial_info, tfile)
-    # with open(f"/home/neil/{ds.PatientID}_plan/plan_info.json", "w") as tfile:
-    #     json.dump(plan_info, tfile)
-    # with open(f"/home/neil/{ds.PatientID}_plan/image_info.json", "w") as tfile:
-    #     json.dump(image_info, tfile)
-    # with open(f"/home/neil/{ds.PatientID}_plan/machine_info.json", "w") as tfile:
-    #     json.dump(machine_info, tfile)
+    with open(f"/home/neil/{ds.PatientID}_plan/trial.json", "w") as tfile:
+        json.dump(trial_info, tfile)
+    with open(f"/home/neil/{ds.PatientID}_plan/plan_info.json", "w") as tfile:
+        json.dump(plan_info, tfile)
+    with open(f"/home/neil/{ds.PatientID}_plan/image_info.json", "w") as tfile:
+        json.dump(image_info, tfile)
+    with open(f"/home/neil/{ds.PatientID}_plan/machine_info.json", "w") as tfile:
+        json.dump(machine_info, tfile)
+    with open(f"/home/neil/{ds.PatientID}_plan/patient_info.json", "w") as tfile:
+        json.dump(patient_info, tfile)
+
     for beam_count, beam in enumerate(beam_list):
-        # print(beam_list)
-        # with open(f"/home/neil/{ds.PatientID}_beam.json", "w") as tfile:
-        #     json.dump(beam, tfile)
+
+        beam_number = beam_count + 1
+        beam_ssd = beam["SSD"]
+        beam_name = beam["FieldID"]
+        beam_description = beam["Name"]
+        beam_modality = beam["Modality"]
+        set_beam_type = beam["SetBeamType"]
+        treatment_machine_name = beam["MachineNameAndVersion"].partition(":")[0]
+
+        cp_manager = {}
+        if "CPManagerObject" in beam["CPManager"]:
+            cp_manager = beam["CPManager"]["CPManagerObject"]
+        else:
+            cp_manager = beam["CPManager"]
+
+        numctrlpts = cp_manager["NumberOfControlPoints"]
 
         ds.PatientSetupSequence.append(pydicom.dataset.Dataset())
 
@@ -181,49 +197,30 @@ def convert_plan(plan, export_path):
 
         ds.PatientSetupSequence.append(pydicom.dataset.Dataset())
         ds.PatientSetupSequence[beam_count].PatientPosition = patient_position
-        ds.PatientSetupSequence[beam_count].PatientSetupNumber = beam_count
+        ds.PatientSetupSequence[beam_count].PatientSetupNumber = beam_number
 
         ds.FractionGroupSequence[0].ReferencedBeamSequence.append(
             pydicom.dataset.Dataset()
         )
         ds.FractionGroupSequence[0].ReferencedBeamSequence[
             beam_count
-        ].ReferencedBeamNumber = beam_count
+        ].ReferencedBeamNumber = beam_number
         ds.BeamSequence.append(pydicom.dataset.Dataset())
         # figure out what to put here
         beam_sequence = ds.BeamSequence[beam_count]
 
-        beam_sequence.Manufacturer = Manufacturer
-        beam_sequence.BeamNumber = beam_count
-        beam_sequence.TreatmentDeliveryType = "TREATMENT"
-        beam_sequence.ReferencedPatientSetupNumber = beam_count
-        beam_sequence.SourceAxisDistance = "1000"
-        beam_sequence.FinalCumulativeMetersetWeight = "1"
-        beam_sequence.PrimaryDosimeterUnit = "MU"
-        beam_sequence.PrimaryFluenceModeSequence = pydicom.sequence.Sequence()
-        beam_sequence.PrimaryFluenceModeSequence.append(pydicom.dataset.Dataset())
-        beam_sequence.PrimaryFluenceModeSequence[0].FluenceMode = "STANDARD"
-
-        beam_sequence.BeamName = beam["FieldID"]
-        beam_sequence.BeamDescription = beam["Name"]
-
-        beam_ssd = beam["SSD"]
-
-        if "Photons" in beam["Modality"]:
-            beam_sequence.RadiationType = "PHOTON"
-        elif "Electrons" in beam["Modality"]:
-            beam_sequence.RadiationType = "ELECTRON"
-        else:
-            beam_sequence.RadiationType = ""
-
-        if "STATIC" in beam["SetBeamType"].upper():
-            beam_sequence.BeamType = beam["SetBeamType"].upper()
-        else:
-            beam_sequence.BeamType = "DYNAMIC"
-
-        beam_sequence.TreatmentMachineName = beam["MachineNameAndVersion"].partition(
-            ":"
-        )[0]
+        # TODO generic this up
+        beam_sequence = mapBeamSequenceGenericTags(
+            beam_sequence,
+            beam_number,
+            numctrlpts,
+            beam_ssd,
+            beam_name,
+            beam_description,
+            beam_modality,
+            set_beam_type,
+            treatment_machine_name,
+        )
 
         doserefpt = None
         for point in plan.points:
@@ -243,15 +240,8 @@ def convert_plan(plan, export_path):
 
         beam_sequence.ControlPointSequence = pydicom.sequence.Sequence()
 
-        cp_manager = {}
-        if "CPManagerObject" in beam["CPManager"]:
-            cp_manager = beam["CPManager"]["CPManagerObject"]
-        else:
-            cp_manager = beam["CPManager"]
-
-        numctrlpts = cp_manager["NumberOfControlPoints"]
-
         cumulativeMetersetWeight = 0.0
+        adjusted_cp_index = 0
         plan.logger.debug("Number of control points: %s", numctrlpts)
 
         # CONTROL POINTS
@@ -378,49 +368,48 @@ def convert_plan(plan, export_path):
             )
 
             # # TODO work out what to do with stepped beams
-            # if (
-            #     "STEP" in beam["SetBeamType"].upper()
-            #     and "SHOOT" in beam["SetBeamType"].upper()
-            # ):
-            #     print("STEP BABAY")
+            if (
+                "STEP" in beam["SetBeamType"].upper()
+                and "SHOOT" in beam["SetBeamType"].upper()
+            ):
 
-            #     ctrlpt_range = numctrlpts * 2
-            #     is_stepwise = True
+                ctrlpt_range = 2
+                is_stepwise = True
 
-            #     if cp_index % 2 == 1:
-            #         currentmeterset = currentmeterset + float(
-            #             metersetweight[metercount]
-            #         )
-            #         metercount += 1
+            else:
+                ctrlpt_range = 1
+                is_stepwise = False
 
-            # else:
-            #     print("NOT STEPWISE")
-            #     ctrlpt_range = numctrlpts
-            #     is_stepwise = False
+            for i in range(0, ctrlpt_range):
 
-            # for ctrlpt_index in range(0, ctrlpt_range):
-            beam_sequence = mapBeamControlPointSequence(
-                cp_index,
-                beam_sequence,
-                beam_energy,
-                cp_ssd,
-                doserate,
-                leafpositions,
-                plan.iso_center,
-                gantryrotdir,
-                gantryangle,
-                colangle,
-                psupportangle,
-                numwedges,
-                cumulativeMetersetWeight,
-                currentMetersetWeight,
-                x1,
-                x2,
-                y1,
-                y2,
-            )
+                if is_stepwise and (cp_index > 0 or i == 1):
+                    adjusted_cp_index += 1
+                else:
+                    adjusted_cp_index = cp_index
 
-            cumulativeMetersetWeight += currentMetersetWeight
+                beam_sequence = mapBeamControlPointSequence(
+                    adjusted_cp_index,
+                    beam_sequence,
+                    beam_energy,
+                    cp_ssd,
+                    doserate,
+                    leafpositions,
+                    plan.iso_center,
+                    gantryrotdir,
+                    gantryangle,
+                    colangle,
+                    psupportangle,
+                    numwedges,
+                    cumulativeMetersetWeight,
+                    currentMetersetWeight,
+                    x1,
+                    x2,
+                    y1,
+                    y2,
+                )
+
+                if i == 0:
+                    cumulativeMetersetWeight += currentMetersetWeight
         # Get the prescription for this beam
         prescription = [
             p
@@ -513,14 +502,55 @@ def list_get(l, idx, default):
         return default
 
 
-def mapBeam():
+def mapBeamSequenceGenericTags(
+    beam_sequence,
+    beam_number,
+    numctrlpts,
+    ssd,
+    beam_name,
+    beam_description,
+    beam_modality,
+    set_beam_type,
+    treatment_machine_name,
+):
     beam_sequence.NumberOfControlPoints = numctrlpts * 2
-    beam_sequence.SourceToSurfaceDistance = beam["SSD"] * 10
+    beam_sequence.SourceToSurfaceDistance = ssd
+    beam_sequence.Manufacturer = Manufacturer
+    beam_sequence.BeamNumber = beam_number
+    beam_sequence.TreatmentDeliveryType = "TREATMENT"
+    beam_sequence.ReferencedPatientSetupNumber = beam_number
+    beam_sequence.SourceAxisDistance = "1000"
+    beam_sequence.FinalCumulativeMetersetWeight = "1"
+    beam_sequence.PrimaryDosimeterUnit = "MU"
+    beam_sequence.PrimaryFluenceModeSequence = pydicom.sequence.Sequence()
+    beam_sequence.PrimaryFluenceModeSequence.append(pydicom.dataset.Dataset())
+    beam_sequence.PrimaryFluenceModeSequence[0].FluenceMode = "STANDARD"
 
-    pass
+    beam_sequence.BeamName = beam_name
+    beam_sequence.BeamDescription = beam_description
+
+    if "Photons" in beam_modality:
+        beam_sequence.RadiationType = "PHOTON"
+    elif "Electrons" in beam_modality:
+        beam_sequence.RadiationType = "ELECTRON"
+    else:
+        beam_sequence.RadiationType = ""
+
+    if "STATIC" in set_beam_type.upper():
+        beam_sequence.BeamType = set_beam_type.upper()
+    else:
+        beam_sequence.BeamType = "DYNAMIC"
+
+    beam_sequence.TreatmentMachineName = treatment_machine_name
+
+    return beam_sequence
 
 
 def mapBeamWedgeSequence():
+    pass
+
+
+def mapPatientSetupSequence(dicom):
     pass
 
 
