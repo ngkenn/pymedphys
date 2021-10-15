@@ -66,17 +66,19 @@ def convert_plan(plan, export_path):
         "RTPLAN export functionality is currently not validated and not stable. Use with caution."
     )
 
+    points = plan.points
     patient_info = plan.pinnacle.patient_info
     plan_info = plan.plan_info
     trial_info = plan.trial_info
     image_info = plan.primary_image.image_info[0]
     machine_info = plan.machine_info
-
     patient_position = plan.patient_position
+    image = plan.primary_image.image
 
     # Get the UID for the Plan
     planInstanceUID = plan.plan_inst_uid
 
+    rtstruct_inst_id = plan.struct_inst_uid
     # Populate required values for file meta information
     file_meta = pydicom.dataset.Dataset()
     file_meta.MediaStorageSOPClassUID = RTPlanSOPClassUID
@@ -91,74 +93,51 @@ def convert_plan(plan, export_path):
         RPfilename, {}, file_meta=file_meta, preamble=b"\x00" * 128
     )
 
-    ds.SpecificCharacterSet = "ISO_IR 100"
-    ds.InstanceCreationDate = time.strftime("%Y%m%d")
-    ds.InstanceCreationTime = time.strftime("%H%M%S")
+    ds = mapGenericTags(
+        ds,
+        plan_info,
+        patient_info,
+        image,
+        image_info,
+        trial_info,
+        planInstanceUID,
+        RTPlanSOPClassUID,
+        rtstruct_inst_id,
+    )
 
-    ds.SOPClassUID = RTPlanSOPClassUID  # RT Plan Storage
-    ds.SOPInstanceUID = planInstanceUID
-
-    datetimesplit = plan_info["ObjectVersion"]["WriteTimeStamp"].split()
-
-    # Read more accurate date from trial file if it is available
-    trial_info = plan.trial_info
-    if trial_info:
-        datetimesplit = trial_info["ObjectVersion"]["WriteTimeStamp"].split()
-
-    ds.StudyDate = datetimesplit[0].replace("-", "")
-    ds.StudyTime = datetimesplit[1].replace(":", "")
-    ds.AccessionNumber = ""
-    ds.Modality = RTPLANModality
-    ds.Manufacturer = Manufacturer
-    ds.OperatorsName = ""
-    ds.ManufacturersModelName = plan_info["ToolType"]
-    ds.SoftwareVersions = [plan_info["PinnacleVersionDescription"]]
-    ds.PhysiciansOfRecord = patient_info["RadiationOncologist"]
-    ds.PatientName = patient_info["FullName"]
-    ds.PatientBirthDate = patient_info["DOB"]
-    ds.PatientID = patient_info["MedicalRecordNumber"]
-    ds.PatientSex = patient_info["Gender"][0]
-
-    ds.StudyInstanceUID = image_info["StudyInstanceUID"]
-    ds.SeriesInstanceUID = planInstanceUID
-    ds.StudyID = plan.primary_image.image["StudyID"]
-
-    ds.FrameOfReferenceUID = image_info["FrameUID"]
-    ds.PositionReferenceIndicator = ""
-
-    ds.RTPlanLabel = f"{plan.plan_info['PlanName']}.0"
-    ds.RTPlanName = plan.plan_info["PlanName"]
-    ds.RTPlanDescription = plan.pinnacle.patient_info["Comment"]
-    ds.RTPlanDate = ds.StudyDate
-    ds.RTPlanTime = ds.StudyTime
-
-    # ds.PlanIntent = "" #Not sure where to get this informationd, will likely
-    # be 'CURATIVE' or 'PALLIATIVE'
-    ds.RTPlanGeometry = "PATIENT"
     # Figure out what goes in DoseReferenceSequence... Should be like a target volume and
     # reference point I think...
     # ds.DoseReferenceSequence = pydicom.sequence.Sequence()
     # figure out where to get this information
     # ds.ToleranceTableSequence = pydicom.sequence.Sequence()
-    ds.FractionGroupSequence = pydicom.sequence.Sequence()
     ds.BeamSequence = pydicom.sequence.Sequence()
     ds.PatientSetupSequence = pydicom.sequence.Sequence()  # need one per beam
+
+    # Build the referenced study sequence
+    ds.ReferencedStudySequence = pydicom.sequence.Sequence()
+    ds.ReferencedStudySequence.append(pydicom.dataset.Dataset())
+    ds.ReferencedStudySequence[0].ReferencedSOPClassUID = "1.2.840.10008.3.1.2.3.2"
+    ds.ReferencedStudySequence[0].ReferencedSOPInstanceUID = image_info[
+        "StudyInstanceUID"
+    ]
+
+    # build the referenced structureset sequence
     ds.ReferencedStructureSetSequence = pydicom.sequence.Sequence()
     ReferencedStructureSet1 = pydicom.dataset.Dataset()
     ds.ReferencedStructureSetSequence.append(ReferencedStructureSet1)
     ds.ReferencedStructureSetSequence[0].ReferencedSOPClassUID = RTStructSOPClassUID
     ds.ReferencedStructureSetSequence[0].ReferencedSOPInstanceUID = plan.struct_inst_uid
-    ds.ApprovalStatus = "UNAPPROVED"  # find out where to get this information
 
-    ds.FractionGroupSequence.append(pydicom.dataset.Dataset())
-    ds.FractionGroupSequence[0].ReferencedBeamSequence = pydicom.sequence.Sequence()
+    ds.ApprovalStatus = "UNAPPROVED"  # find out where to get this information
 
     metersetweight = ["0"]
 
-    num_fractions = 0
     beam_count = 0
     beam_list = trial_info["BeamList"] if trial_info["BeamList"] else []
-    if len(beam_list) == 0:
+    num_beams = len(beam_list)
+    ds = appendFractionGroupSequence(ds, trial_info, beam_list, plan)
+
+    if num_beams == 0:
         plan.logger.warning("No Beams found in Trial. Unable to generate RTPLAN.")
         return
 
@@ -191,20 +170,12 @@ def convert_plan(plan, export_path):
 
         numctrlpts = cp_manager["NumberOfControlPoints"]
 
-        ds.PatientSetupSequence.append(pydicom.dataset.Dataset())
-
         plan.logger.info("Exporting Plan for beam: %s", beam["Name"])
 
         ds.PatientSetupSequence.append(pydicom.dataset.Dataset())
         ds.PatientSetupSequence[beam_count].PatientPosition = patient_position
         ds.PatientSetupSequence[beam_count].PatientSetupNumber = beam_number
 
-        ds.FractionGroupSequence[0].ReferencedBeamSequence.append(
-            pydicom.dataset.Dataset()
-        )
-        ds.FractionGroupSequence[0].ReferencedBeamSequence[
-            beam_count
-        ].ReferencedBeamNumber = beam_number
         ds.BeamSequence.append(pydicom.dataset.Dataset())
         # figure out what to put here
         beam_sequence = ds.BeamSequence[beam_count]
@@ -234,15 +205,53 @@ def convert_plan(plan, export_path):
 
         plan.logger.debug("Dose reference point: %s", doserefpt)
 
-        ds.FractionGroupSequence[0].ReferencedBeamSequence[
-            beam_count
-        ].BeamDoseSpecificationPoint = doserefpt
-
         beam_sequence.ControlPointSequence = pydicom.sequence.Sequence()
 
         cumulativeMetersetWeight = 0.0
         adjusted_cp_index = 0
         plan.logger.debug("Number of control points: %s", numctrlpts)
+
+        # Get the machine name and version and energy name for this beam
+        machinenameandversion = beam["MachineNameAndVersion"].split(": ")
+        machinename = machinenameandversion[0]
+        machineversion = machinenameandversion[1]
+        machineenergyname = beam["MachineEnergyName"]
+
+        beam_energy = re.findall(r"[-+]?\d*\.\d+|\d+", beam["MachineEnergyName"])[0]
+
+        # Find the DosePerMuAtCalibration parameter from the machine data
+        dose_per_mu_at_cal = machine_info["PhotonEnergyList"][0]["PhysicsData"][
+            "OutputFactor"
+        ]["DosePerMuAtCalibration"]
+        if (
+            machine_info["Name"] == machinename
+            and machine_info["VersionTimestamp"] == machineversion
+        ):
+
+            for energy in machine_info["PhotonEnergyList"]:
+
+                if energy["Name"] == machineenergyname:
+                    dose_per_mu_at_cal = energy["PhysicsData"]["OutputFactor"][
+                        "DosePerMuAtCalibration"
+                    ]
+                    plan.logger.debug(
+                        "Using DosePerMuAtCalibration of: %s", dose_per_mu_at_cal
+                    )
+
+        gantryrotdir = "NONE"
+        if (
+            "GantryIsCCW" in cp_manager
+        ):  # This may be a problem here!!!! Not sure how to Pinnacle does this, could
+            # be 1 if CW, must be somewhere that states if gantry is rotating or not
+            if cp_manager["GantryIsCCW"] == 1:
+                gantryrotdir = "CC"
+        if "GantryIsCW" in cp_manager:
+            if cp_manager["GantryIsCW"] == 1:
+                gantryrotdir = "CW"
+
+        doserate = 0
+        if "DoseRate" in beam:  # TODO What to do if DoseRate isn't available in Beam?
+            doserate = beam["DoseRate"]
 
         # CONTROL POINTS
         # Loop through the cp indices and map them to dicom
@@ -291,83 +300,13 @@ def convert_plan(plan, export_path):
                 wedgetype,
             ) = getWedgeInfo(cp, plan)
 
-            # Get the prescription for this beam
-            prescription = [
-                p
-                for p in trial_info["PrescriptionList"]
-                if p["Name"] == beam["PrescriptionName"]
-            ][0]
-
-            # Get the machine name and version and energy name for this beam
-            machinenameandversion = beam["MachineNameAndVersion"].split(": ")
-            machinename = machinenameandversion[0]
-            machineversion = machinenameandversion[1]
-            machineenergyname = beam["MachineEnergyName"]
-
-            beam_energy = re.findall(r"[-+]?\d*\.\d+|\d+", beam["MachineEnergyName"])[0]
-
-            # Find the DosePerMuAtCalibration parameter from the machine data
-            dose_per_mu_at_cal = -1
-            if (
-                machine_info["Name"] == machinename
-                and machine_info["VersionTimestamp"] == machineversion
-            ):
-
-                for energy in machine_info["PhotonEnergyList"]:
-
-                    if energy["Name"] == machineenergyname:
-                        dose_per_mu_at_cal = energy["PhysicsData"]["OutputFactor"][
-                            "DosePerMuAtCalibration"
-                        ]
-                        plan.logger.debug(
-                            "Using DosePerMuAtCalibration of: %s", dose_per_mu_at_cal
-                        )
-
-            prescripdose = beam["MonitorUnitInfo"]["PrescriptionDose"]
-            normdose = beam["MonitorUnitInfo"]["NormalizedDose"]
-
-            if normdose == 0:
-                ds.FractionGroupSequence[0].ReferencedBeamSequence[
-                    beam_count
-                ].BeamMeterset = 0
-            else:
-                ds.FractionGroupSequence[0].ReferencedBeamSequence[
-                    beam_count
-                ].BeamDose = (prescripdose / 100)
-                ds.FractionGroupSequence[0].ReferencedBeamSequence[
-                    beam_count
-                ].BeamMeterset = prescripdose / (normdose * dose_per_mu_at_cal)
-                beammeterset = prescripdose / (normdose * dose_per_mu_at_cal)
-
-            gantryrotdir = "NONE"
-            if (
-                "GantryIsCCW" in cp_manager
-            ):  # This may be a problem here!!!! Not sure how to Pinnacle does this, could
-                # be 1 if CW, must be somewhere that states if gantry is rotating or not
-                if cp_manager["GantryIsCCW"] == 1:
-                    gantryrotdir = "CC"
-            if "GantryIsCW" in cp_manager:
-                if cp_manager["GantryIsCW"] == 1:
-                    gantryrotdir = "CW"
-
-            plan.logger.debug(
-                "Beam MU: %s",
-                ds.FractionGroupSequence[0]
-                .ReferencedBeamSequence[beam_count]
-                .BeamMeterset,
-            )
-
-            doserate = 0
-            if (
-                "DoseRate" in beam
-            ):  # TODO What to do if DoseRate isn't available in Beam?
-                doserate = beam["DoseRate"]
-
             beam_sequence = mapBeamDeviceLimitingSequence(
                 beam_sequence, n_points, machine_info
             )
 
-            # # TODO work out what to do with stepped beams
+            # if we have a step and shoot beam, we need an extra
+            # control point for every one in the beam
+            # the 2nd control point will have the metersetweight incremented
             if (
                 "STEP" in beam["SetBeamType"].upper()
                 and "SHOOT" in beam["SetBeamType"].upper()
@@ -381,7 +320,8 @@ def convert_plan(plan, export_path):
                 is_stepwise = False
 
             for i in range(0, ctrlpt_range):
-
+                # if step and shoot we need a different cp_index counter
+                # otherwise it's just the cp_index from the beam loop
                 if is_stepwise and (cp_index > 0 or i == 1):
                     adjusted_cp_index += 1
                 else:
@@ -410,84 +350,6 @@ def convert_plan(plan, export_path):
 
                 if i == 0:
                     cumulativeMetersetWeight += currentMetersetWeight
-        # Get the prescription for this beam
-        prescription = [
-            p
-            for p in trial_info["PrescriptionList"]
-            if p["Name"] == beam["PrescriptionName"]
-        ][0]
-
-        # Get the machine name and version and energy name for this beam
-        machinenameandversion = beam["MachineNameAndVersion"].split(": ")
-        machinename = machinenameandversion[0]
-        machineversion = machinenameandversion[1]
-        machineenergyname = beam["MachineEnergyName"]
-
-        beam_energy = re.findall(r"[-+]?\d*\.\d+|\d+", beam["MachineEnergyName"])[0]
-
-        # Find the DosePerMuAtCalibration parameter from the machine data
-        dose_per_mu_at_cal = -1
-        if (
-            machine_info["Name"] == machinename
-            and machine_info["VersionTimestamp"] == machineversion
-        ):
-
-            for energy in machine_info["PhotonEnergyList"]:
-
-                if energy["Name"] == machineenergyname:
-                    dose_per_mu_at_cal = energy["PhysicsData"]["OutputFactor"][
-                        "DosePerMuAtCalibration"
-                    ]
-                    plan.logger.debug(
-                        "Using DosePerMuAtCalibration of: %s", dose_per_mu_at_cal
-                    )
-
-        prescripdose = beam["MonitorUnitInfo"]["PrescriptionDose"]
-        normdose = beam["MonitorUnitInfo"]["NormalizedDose"]
-
-        if normdose == 0:
-            ds.FractionGroupSequence[0].ReferencedBeamSequence[
-                beam_count
-            ].BeamMeterset = 0
-        else:
-            ds.FractionGroupSequence[0].ReferencedBeamSequence[beam_count].BeamDose = (
-                prescripdose / 100
-            )
-            ds.FractionGroupSequence[0].ReferencedBeamSequence[
-                beam_count
-            ].BeamMeterset = prescripdose / (normdose * dose_per_mu_at_cal)
-
-        gantryrotdir = "NONE"
-        if (
-            "GantryIsCCW" in cp_manager
-        ):  # This may be a problem here!!!! Not sure how to Pinnacle does this, could
-            # be 1 if CW, must be somewhere that states if gantry is rotating or not
-            if cp_manager["GantryIsCCW"] == 1:
-                gantryrotdir = "CC"
-        if "GantryIsCW" in cp_manager:
-            if cp_manager["GantryIsCW"] == 1:
-                gantryrotdir = "CW"
-
-        plan.logger.debug(
-            "Beam MU: %s",
-            ds.FractionGroupSequence[0].ReferencedBeamSequence[beam_count].BeamMeterset,
-        )
-
-        doserate = 0
-        if "DoseRate" in beam:  # TODO What to do if DoseRate isn't available in Beam?
-            doserate = beam["DoseRate"]
-
-        prescription = [
-            p
-            for p in trial_info["PrescriptionList"]
-            if p["Name"] == beam["PrescriptionName"]
-        ][0]
-        num_fractions = prescription["NumberOfFractions"]
-
-    ds.FractionGroupSequence[0].FractionGroupNumber = 1
-    ds.FractionGroupSequence[0].NumberOfFractionsPlanned = num_fractions
-    ds.FractionGroupSequence[0].NumberOfBeams = beam_count
-    ds.FractionGroupSequence[0].NumberOfBrachyApplicationSetups = "0"
 
     # Save the RTPlan Dicom File
     output_file = os.path.join(export_path, RPfilename)
@@ -500,6 +362,161 @@ def list_get(l, idx, default):
         return l[idx]
     except IndexError:
         return default
+
+
+def mapGenericTags(
+    dicom_obj,
+    plan_info,
+    patient_info,
+    image,
+    image_info,
+    trial_info,
+    planInstanceUID,
+    RTPlanSOPClassUID,
+    rtstruct_inst_id,
+):
+    dicom_obj.SpecificCharacterSet = "ISO_IR 100"
+    dicom_obj.InstanceCreationDate = time.strftime("%Y%m%d")
+    dicom_obj.InstanceCreationTime = time.strftime("%H%M%S")
+
+    dicom_obj.SOPClassUID = RTPlanSOPClassUID  # RT Plan Storage
+    dicom_obj.SOPInstanceUID = planInstanceUID
+
+    datetimesplit = plan_info["ObjectVersion"]["WriteTimeStamp"].split()
+
+    # Read more accurate date from trial file if it is available
+    if trial_info:
+        datetimesplit = trial_info["ObjectVersion"]["WriteTimeStamp"].split()
+
+    dicom_obj.StudyDate = datetimesplit[0].replace("-", "")
+    dicom_obj.StudyTime = datetimesplit[1].replace(":", "")
+    dicom_obj.AccessionNumber = ""
+    dicom_obj.Modality = RTPLANModality
+    dicom_obj.Manufacturer = Manufacturer
+    dicom_obj.OperatorsName = ""
+    dicom_obj.ManufacturersModelName = plan_info["ToolType"]
+    dicom_obj.SoftwareVersions = [plan_info["PinnacleVersionDescription"]]
+    dicom_obj.PhysiciansOfRecord = patient_info["RadiationOncologist"]
+    dicom_obj.PatientName = patient_info["FullName"]
+    dicom_obj.PatientBirthDate = patient_info["DOB"]
+    dicom_obj.PatientID = patient_info["MedicalRecordNumber"]
+    dicom_obj.PatientSex = patient_info["Gender"][0]
+
+    dicom_obj.StudyInstanceUID = image_info["StudyInstanceUID"]
+    dicom_obj.SeriesInstanceUID = planInstanceUID
+    dicom_obj.StudyID = image["StudyID"]
+
+    dicom_obj.FrameOfReferenceUID = image_info["FrameUID"]
+    dicom_obj.PositionReferenceIndicator = ""
+
+    dicom_obj.RTPlanLabel = f"{plan_info['PlanName']}.0"
+    dicom_obj.RTPlanName = plan_info["PlanName"]
+    dicom_obj.RTPlanDescription = patient_info["Comment"]
+    dicom_obj.StudyDescription = patient_info["Comment"]
+    dicom_obj.SeriesDescription = trial_info["SeriesDescription"]
+    dicom_obj.RTPlanDate = dicom_obj.StudyDate
+    dicom_obj.RTPlanTime = dicom_obj.StudyTime
+
+    dicom_obj.SeriesNumber = trial_info["SeriesNumber"]
+    # dicom_obj.PlanIntent = "" #Not sure where to get this informationd, will likely
+    # be 'CURATIVE' or 'PALLIATIVE'
+    dicom_obj.StationName = "PyMedPhys"
+
+    if rtstruct_inst_id:
+        dicom_obj.RTPlanGeometry = "PATIENT"
+    else:
+        dicom_obj.RTPlanGeometry = "TREATMENT_DEVICE"
+
+    # accessionNumber
+    # referringphysicianname
+    # OperatorsNames
+
+    return dicom_obj
+
+
+def appendFractionGroupSequence(ds, trial_info, beam_list, plan):
+    ds.FractionGroupSequence = pydicom.sequence.Sequence()
+    # one per prescription
+    for p_count, prescription in enumerate(trial_info["PrescriptionList"]):
+        prescription_name = prescription["Name"]
+        ds.FractionGroupSequence.append(pydicom.dataset.Dataset())
+        ds.FractionGroupSequence[
+            p_count
+        ].ReferencedBeamSequence = pydicom.sequence.Sequence()
+        # generic tags
+        num_fractions = prescription["NumberOfFractions"]
+        ds.FractionGroupSequence[p_count].FractionGroupNumber = p_count + 1
+        ds.FractionGroupSequence[p_count].NumberOfFractionsPlanned = num_fractions
+        ds.FractionGroupSequence[p_count].NumberOfBrachyApplicationSetups = "0"
+
+        beam_index = 0
+        num_beams = 0
+        for beam in beam_list:
+            beam_prescription = beam["PrescriptionName"]
+            if beam_prescription == prescription_name:
+
+                doserefpt = getBeamDoseRefPt(plan, beam)
+                num_beams += 1
+                prescripdose = beam["MonitorUnitInfo"]["PrescriptionDose"]
+                beammeterset = getBeamMeterset(plan, beam)
+                ds.FractionGroupSequence[p_count].ReferencedBeamSequence.append(
+                    pydicom.dataset.Dataset()
+                )
+
+                ds.FractionGroupSequence[p_count].ReferencedBeamSequence[
+                    beam_index
+                ].ReferencedBeamNumber = (beam_index + 1)
+
+                ds.FractionGroupSequence[p_count].ReferencedBeamSequence[
+                    beam_index
+                ].BeamDoseSpecificationPoint = doserefpt
+
+                num_fractions = prescription["NumberOfFractions"]
+
+                ds.FractionGroupSequence[p_count].ReferencedBeamSequence[
+                    beam_index
+                ].BeamDose = (prescripdose / 100)
+
+                ds.FractionGroupSequence[p_count].ReferencedBeamSequence[
+                    beam_index
+                ].BeamMeterset = beammeterset
+
+                beam_index += 1
+
+        ds.FractionGroupSequence[p_count].NumberOfBeams = num_beams
+
+    return ds
+
+
+def getBeamDoseRefPt(plan, beam):
+    for point in plan.points:
+        if point["Name"] == beam["PrescriptionPointName"]:
+            doserefpt = plan.convert_point(point)
+            plan.logger.debug("Dose reference point found: %s", point["Name"])
+
+    if not doserefpt:
+        plan.logger.debug("No dose reference point, setting to isocenter")
+        doserefpt = plan.iso_center
+
+    return doserefpt
+
+
+def getBeamMeterset(plan, beam):
+    beam_name = beam["FieldID"]
+    try:
+        mu_beams = plan.mu["Trial"]["BeamList"]
+        for mu_beam in mu_beams:
+            if beam_name.upper() == mu_beam["FieldID"].upper():
+                beammeterset = float(mu_beam["MU"])
+
+        return beammeterset
+
+    except:
+        prescripdose = beam["MonitorUnitInfo"]["PrescriptionDose"]
+        normdose = beam["MonitorUnitInfo"]["NormalizedDose"]
+        beammeterset = prescripdose / normdose
+
+        return beammeterset
 
 
 def mapBeamSequenceGenericTags(
@@ -538,6 +555,8 @@ def mapBeamSequenceGenericTags(
 
     if "STATIC" in set_beam_type.upper():
         beam_sequence.BeamType = set_beam_type.upper()
+    elif "STEP" in set_beam_type.upper() and "SHOOT" in set_beam_type.upper():
+        beam_sequence.BeamType = "STATIC"
     else:
         beam_sequence.BeamType = "DYNAMIC"
 

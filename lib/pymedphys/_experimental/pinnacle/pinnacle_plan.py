@@ -72,6 +72,7 @@ class PinnaclePlan:
         self._path = path
         self._plan_info = plan
 
+        self._mu = None
         self._machine_info = None  # Data of the machines used for this plan
         self._trials = None  # Data found in plan.Trial
         self._trial_info = None  # 'Active' trial for this plan
@@ -156,6 +157,25 @@ class PinnaclePlan:
             self._machine_info = pinn_to_dict(path_machine)
 
         return self._machine_info
+
+    @property
+    def mu(self):
+        """Gets the machine info for this plan.
+
+        Returns
+        -------
+        machine_info : dict
+            Machine info read from 'plan.Pinnacle.Machines' file.
+        """
+
+        if not self._mu:
+            patient_id = self._pinnacle.patient_info["MedicalRecordNumber"]
+            # path_mu = os.path.join(self._path, "WA210306.MU")
+            path_mu = os.path.join(self._path, f"{patient_id[:-1]}.MU")
+            self.logger.debug("Reading machine data from: %s", path_mu)
+            self._mu = pinn_to_dict(path_mu)
+
+        return self._mu
 
     @property
     def trials(self):

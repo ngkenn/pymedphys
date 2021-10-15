@@ -40,7 +40,7 @@
 
 import io
 import re
-
+import json
 from pymedphys._imports import yaml
 
 
@@ -68,17 +68,18 @@ def pinn_to_dict(filename):
 
             split_data = data[indices[i] : next_index]
 
+            filename_comps = filename.split("/")
+            file_name = filename_comps[len(filename_comps) - 1]
             if isinstance(result, list):
-                d = yaml.safe_load(convert_to_yaml(split_data))
+                d = yaml.safe_load(convert_to_yaml(split_data, filename=file_name))
                 result.append(d[list(d.keys())[0]])
             else:
-                result = yaml.safe_load(convert_to_yaml(split_data))
+                result = yaml.safe_load(convert_to_yaml(split_data, filename=file_name))
 
     return result
 
 
-def convert_to_yaml(data):
-
+def convert_to_yaml(data, filename=None):
     out = ""
     listIndents = []
     in_comment = False
@@ -94,6 +95,13 @@ def convert_to_yaml(data):
             in_comment = False
             continue
 
+        if re.search('String = "', line) and ".MU" in filename:
+            print(filename)
+            continue
+
+        if line == '";\n' and ".MU" in filename:
+            # print("GETTING RID")
+            continue
         # Get the indentation of this line
         thisIndent = len(re.match(r"^\s*", line).group())
 
@@ -133,4 +141,5 @@ def pinn_to_yaml(filename):
 
     with io.open(filename, "r", encoding="ISO-8859-1", errors="ignore") as fp:
         data = fp.readlines()
-        return convert_to_yaml(data)
+        output = convert_to_yaml(data, filename=filename)
+        return output

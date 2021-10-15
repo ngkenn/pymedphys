@@ -147,6 +147,7 @@ def export_cli(args):
     for pl in plans:
         if pl.plan_info["PlanName"] == plan_name:
             plan = pl
+            # break
 
     if not plan:
 
