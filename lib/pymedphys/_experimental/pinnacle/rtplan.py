@@ -105,13 +105,14 @@ def convert_plan(plan, export_path):
         rtstruct_inst_id,
     )
 
+    ds = mapPatientSetupSequence(ds, patient_position)
+
     # Figure out what goes in DoseReferenceSequence... Should be like a target volume and
     # reference point I think...
     # ds.DoseReferenceSequence = pydicom.sequence.Sequence()
     # figure out where to get this information
     # ds.ToleranceTableSequence = pydicom.sequence.Sequence()
-    ds.BeamSequence = pydicom.sequence.Sequence()
-    ds.PatientSetupSequence = pydicom.sequence.Sequence()  # need one per beam
+    ds.BeamSequence = pydicom.sequence.Sequence()  # need one per beam
 
     # Build the referenced study sequence
     ds.ReferencedStudySequence = pydicom.sequence.Sequence()
@@ -172,10 +173,6 @@ def convert_plan(plan, export_path):
 
         plan.logger.info("Exporting Plan for beam: %s", beam["Name"])
 
-        ds.PatientSetupSequence.append(pydicom.dataset.Dataset())
-        ds.PatientSetupSequence[beam_count].PatientPosition = patient_position
-        ds.PatientSetupSequence[beam_count].PatientSetupNumber = beam_number
-
         ds.BeamSequence.append(pydicom.dataset.Dataset())
         # figure out what to put here
         beam_sequence = ds.BeamSequence[beam_count]
@@ -192,6 +189,9 @@ def convert_plan(plan, export_path):
             set_beam_type,
             treatment_machine_name,
         )
+
+        if beam_sequence.RadiationType == "ELECTRON":
+            beam_sequence = mapElectronBeamModifiers(beam_sequence, beam, machine_info)
 
         doserefpt = None
         for point in plan.points:
@@ -569,8 +569,12 @@ def mapBeamWedgeSequence():
     pass
 
 
-def mapPatientSetupSequence(dicom):
-    pass
+def mapPatientSetupSequence(ds, patient_position):
+    ds.PatientSetupSequence = pydicom.sequence.Sequence()
+    ds.PatientSetupSequence.append(pydicom.dataset.Dataset())
+    ds.PatientSetupSequence[0].PatientPosition = patient_position
+    ds.PatientSetupSequence[0].PatientSetupNumber = 1
+    return ds
 
 
 def mapBeamDeviceLimitingSequence(beam_sequence, n_points, machine_info):
@@ -623,6 +627,72 @@ def mapBeamDeviceLimitingSequence(beam_sequence, n_points, machine_info):
     beam_sequence.BeamLimitingDeviceSequence[2].LeafPositionBoundaries = bounds
 
     return beam_sequence
+
+
+def mapElectronBeamModifiers(
+    beam_dicom_obj: pydicom.dataset.Dataset,
+    beam_info,
+    machine_info,
+):
+
+    # add applicator
+    beam_dicom_obj.ApplicatorSequence = pydicom.sequence.Sequence()
+    beam_dicom_obj.ApplicatorSequence.append(pydicom.dataset.Dataset())
+    applicator_name = beam_info["ElectronApplicatorName"]
+
+    applicator_info: dict
+    for applicator in machine_info["ElectronApplicatorList"]:
+        if applicator["Name"] == applicator_name:
+            applicator_info = applicator
+            break
+    applicator_id = applicator_info["ManufacturerCode"]
+    applicator_type = f"ELECTRON_{applicator_id.upper()}"
+
+    beam_dicom_obj.ApplicatorSequence[0].ApplicatorID = applicator_id
+    beam_dicom_obj.ApplicatorSequence[0].ApplicatorType = applicator_type
+
+    # add blocksequence
+    beam_dicom_obj.BlockSequence = pydicom.sequence.Sequence()
+
+    actual_mod_count = 0
+    for cp_count, cp in enumerate(beam_info["CPManager"]["ControlPointList"]):
+        for mod_count, modifier in enumerate(cp["ModifierList"]):
+            if cp_count > 0 or mod_count > 0:
+                actual_mod_count += 1
+            beam_dicom_obj.BlockSequence.append(pydicom.dataset.Dataset())
+            block_contour = modifier["ContourList"][0]["Curve"]["RawData"]
+            npoints = block_contour["NumberOfPoints"]
+            raw_point_list = block_contour["Points[]"].split(",")
+            point_list = getValidPointList(raw_point_list)
+
+            block_tray_factor = beam_info["BlockAndTrayFactor"]
+            tray_factor = beam_info["TrayFactor"]
+            block_transmission = block_tray_factor / tray_factor
+
+            source_to_blocktray_distance = machine_info["SourceToBlockTrayDistance"]
+            if modifier["InsideMode"] == "Expose":
+                block_type = "APERTURE"
+            else:
+                block_type = "SHIELDING"
+
+            modifier_name = modifier["Name"]
+
+            beam_dicom_obj.BlockSequence[actual_mod_count].BlockTrayID = modifier_name
+            beam_dicom_obj.BlockSequence[
+                actual_mod_count
+            ].BlockTransmission = block_transmission
+            beam_dicom_obj.BlockSequence[actual_mod_count].SourceToBlockTrayDistance = (
+                source_to_blocktray_distance * 10
+            )
+
+            beam_dicom_obj.BlockSequence[actual_mod_count].BlockType = block_type
+            beam_dicom_obj.BlockSequence[actual_mod_count].BlockNumberOfPoints = npoints
+            beam_dicom_obj.BlockSequence[actual_mod_count].BlockData = point_list
+            beam_dicom_obj.BlockSequence[actual_mod_count].BlockNumber = (
+                actual_mod_count + 1
+            )
+
+    return beam_dicom_obj
 
 
 def mapBeamControlPointSequence(
@@ -722,7 +792,7 @@ def mapBeamControlPointSequence(
 
     currControlPointSequence.GantryAngle = gantryangle
     currControlPointSequence.GantryRotationDirection = gantryrotdir
-    currControlPointSequence.SourceToSurfaceDistance = sourceToSurfaceDistance
+    # currControlPointSequence.SourceToSurfaceDistance = sourceToSurfaceDistance
 
     if ctrlpt_index == 0:  # first control point beam meterset always zero
         currControlPointSequence.NominalBeamEnergy = beam_energy
@@ -815,3 +885,22 @@ def getWedgeInfo(cp, plan):
         plan.logger.debug("Wedge name = %s", wedgename)
 
     return numwedges, wedgename, wedgeorientation, wedgeangle, wedgetype
+
+
+def getValidPointList(point_list):
+    x_positions = []
+    y_positions = []
+    for p_count, p in enumerate(point_list):
+        point = float(p.strip())
+        if p_count % 2 == 0:
+            x_positions.append(-point * 10)
+        else:
+            y_positions.append(point * 10)
+        p_count += 1
+
+        if p_count == len(point_list):
+            x_positions = list(reversed(x_positions))
+            y_positions = list(reversed(y_positions))
+            combined_positions = x_positions + y_positions
+
+            return combined_positions
