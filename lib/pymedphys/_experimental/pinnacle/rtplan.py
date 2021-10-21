@@ -142,16 +142,16 @@ def convert_plan(plan, export_path):
         plan.logger.warning("No Beams found in Trial. Unable to generate RTPLAN.")
         return
 
-    with open(f"/home/neil/{ds.PatientID}_plan/trial.json", "w") as tfile:
-        json.dump(trial_info, tfile)
-    with open(f"/home/neil/{ds.PatientID}_plan/plan_info.json", "w") as tfile:
-        json.dump(plan_info, tfile)
-    with open(f"/home/neil/{ds.PatientID}_plan/image_info.json", "w") as tfile:
-        json.dump(image_info, tfile)
-    with open(f"/home/neil/{ds.PatientID}_plan/machine_info.json", "w") as tfile:
-        json.dump(machine_info, tfile)
-    with open(f"/home/neil/{ds.PatientID}_plan/patient_info.json", "w") as tfile:
-        json.dump(patient_info, tfile)
+    # with open(f"/home/neil/{ds.PatientID}_plan/trial.json", "w") as tfile:
+    #     json.dump(trial_info, tfile)
+    # with open(f"/home/neil/{ds.PatientID}_plan/plan_info.json", "w") as tfile:
+    #     json.dump(plan_info, tfile)
+    # with open(f"/home/neil/{ds.PatientID}_plan/image_info.json", "w") as tfile:
+    #     json.dump(image_info, tfile)
+    # with open(f"/home/neil/{ds.PatientID}_plan/machine_info.json", "w") as tfile:
+    #     json.dump(machine_info, tfile)
+    # with open(f"/home/neil/{ds.PatientID}_plan/patient_info.json", "w") as tfile:
+    #     json.dump(patient_info, tfile)
 
     for beam_count, beam in enumerate(beam_list):
 

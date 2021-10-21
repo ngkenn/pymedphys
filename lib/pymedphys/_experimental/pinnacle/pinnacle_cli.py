@@ -145,97 +145,101 @@ def export_cli(args):
     plan = None
 
     for pl in plans:
-        if pl.plan_info["PlanName"] == plan_name:
-            plan = pl
-            # break
+        plan = pl
+        #     if pl.plan_info["PlanName"] == plan_name:
+        #         plan = pl
+        #         # break
 
-    if not plan:
+        # if not plan:
 
-        if plan_name:
-            logger.error("Plan not found (%s)", plan_name)
+        #     if plan_name:
+        #         logger.error("Plan not found (%s)", plan_name)
+        #         sys.exit()
+
+        #     # Select a default plan if user didn't pass in a plan name
+        #     plan = plans[0]
+        #     logger.warning(
+        #         "No plan name supplied, selecting first plan: %s",
+        #         plan.plan_info["PlanName"],
+        #     )
+
+        # Set the Trial if it was given
+        if trial:
+
+            try:
+                plan.active_trial = trial
+            except KeyError:
+                logger.error(
+                    "No Trial: %s found in Plan: %s", trial, plan.plan_info["PlanName"]
+                )
+                sys.exit()
+
+        # If we got up to here, we are exporting something, so make sure the
+        #  output_directory was specified
+        if not output_directory:
+            logger.error("Specifiy an output directory with -o")
             sys.exit()
 
-        # Select a default plan if user didn't pass in a plan name
-        plan = plans[0]
-        logger.warning(
-            "No plan name supplied, selecting first plan: %s",
-            plan.plan_info["PlanName"],
-        )
+        if not os.path.exists(output_directory):
+            logger.info("Creating output directory: %s", output_directory)
+            os.makedirs(output_directory)
 
-    # Set the Trial if it was given
-    if trial:
+        if uid_prefix:
 
-        try:
-            plan.active_trial = trial
-        except KeyError:
-            logger.error(
-                "No Trial: %s found in Plan: %s", trial, plan.plan_info["PlanName"]
-            )
-            sys.exit()
+            if not plan.is_prefix_valid(uid_prefix):
+                logger.error("UID Prefix supplied is invalid")
+                sys.exit()
+            plan.uid_prefix = uid_prefix
 
-    # If we got up to here, we are exporting something, so make sure the
-    #  output_directory was specified
-    if not output_directory:
-        logger.error("Specifiy an output directory with -o")
-        sys.exit()
+        primary_image_exported = False
+        if image_series:
 
-    if not os.path.exists(output_directory):
-        logger.info("Creating output directory: %s", output_directory)
-        os.makedirs(output_directory)
+            image_series_uids = []
 
-    if uid_prefix:
-
-        if not plan.is_prefix_valid(uid_prefix):
-            logger.error("UID Prefix supplied is invalid")
-            sys.exit()
-        plan.uid_prefix = uid_prefix
-
-    primary_image_exported = False
-    if image_series:
-
-        image_series_uids = []
-
-        if image_series == "all":
-            for image in p.images:
-                image_series_uids.append(image.image_header["series_UID"])
-        else:
-            image_series_uids.append(image_series)
-
-        for suid in image_series_uids:
-            logger.info("Exporting image with UID: %s", suid)
-            p.export_image(series_uid=suid, export_path=output_directory)
-
-            series_uid = plan.primary_image.image_header["series_UID"]
-            if plan.primary_image and series_uid == suid:
-                primary_image_exported = True
-
-    if "CT" in modality:
-
-        if plan.primary_image:
-
-            logger.info(
-                "Exporting primary image for plan: %s", plan.plan_info["PlanName"]
-            )
-
-            if primary_image_exported:
-                logger.info("Primary image was already exported during this run")
+            if image_series == "all":
+                for image in p.images:
+                    image_series_uids.append(image.image_header["series_UID"])
             else:
-                p.export_image(image=plan.primary_image, export_path=output_directory)
-        else:
-            logger.error(
-                "No primary image to export for plan: %s", plan.plan_info["PlanName"]
-            )
+                image_series_uids.append(image_series)
 
-    if "RTSTRUCT" in modality:
-        if roiskip:
-            p.export_struct(
-                plan=plan, export_path=output_directory, skip_pattern=roiskip
-            )
-        else:
-            p.export_struct(plan=plan, export_path=output_directory)
+            for suid in image_series_uids:
+                logger.info("Exporting image with UID: %s", suid)
+                p.export_image(series_uid=suid, export_path=output_directory)
 
-    if "RTPLAN" in modality:
-        p.export_plan(plan=plan, export_path=output_directory)
+                series_uid = plan.primary_image.image_header["series_UID"]
+                if plan.primary_image and series_uid == suid:
+                    primary_image_exported = True
 
-    if "RTDOSE" in modality:
-        p.export_dose(plan=plan, export_path=output_directory)
+        if "CT" in modality:
+
+            if plan.primary_image:
+
+                logger.info(
+                    "Exporting primary image for plan: %s", plan.plan_info["PlanName"]
+                )
+
+                if primary_image_exported:
+                    logger.info("Primary image was already exported during this run")
+                else:
+                    p.export_image(
+                        image=plan.primary_image, export_path=output_directory
+                    )
+            else:
+                logger.error(
+                    "No primary image to export for plan: %s",
+                    plan.plan_info["PlanName"],
+                )
+
+        if "RTSTRUCT" in modality:
+            if roiskip:
+                p.export_struct(
+                    plan=plan, export_path=output_directory, skip_pattern=roiskip
+                )
+            else:
+                p.export_struct(plan=plan, export_path=output_directory)
+
+        if "RTPLAN" in modality:
+            p.export_plan(plan=plan, export_path=output_directory)
+
+        if "RTDOSE" in modality:
+            p.export_dose(plan=plan, export_path=output_directory)
